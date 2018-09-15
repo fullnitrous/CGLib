@@ -7,8 +7,8 @@
 #include <time.h>
 
 
-#ifndef SVG_GRAPH_LIB
-  #define SVG_GRAPH_LIB
+#ifndef C_GRAPH_LIB
+  #define C_GRAPH_LIB
 
   #define PI 3.14159265
 

@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "sdb-dge/svg-grapher/grapher.h"
+#include "src/cgraphlib.h"
 
 int main(void)
 {
