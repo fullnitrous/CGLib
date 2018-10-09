@@ -1,6 +1,7 @@
 #include "cgraphlib.h"
 #include "cgraphlib-other.h"
 
+/*
 void bar(BarData* bd)
 {
   FILE* file = fopen(bd->fileName, "wb");
@@ -22,7 +23,7 @@ void bar(BarData* bd)
     bd->axelRGBA[1],
     bd->axelRGBA[2]);
 
-  bd->viewportY -= 40 * bd->nBars;
+  //bd->viewportY -= 40 * bd->nBars;
 
   float yAxelxOffset = bd->viewportX;
   float xAxelyOffset = bd->viewportY;
@@ -104,8 +105,7 @@ void bar(BarData* bd)
       height,
       RGB[0],
       RGB[1],
-      RGB[2],
-      0.6);
+      RGB[2]);
 
     x = margin * 2;
     y = yOffset + count;
@@ -120,8 +120,7 @@ void bar(BarData* bd)
       5.0,
       RGB[0],
       RGB[1],
-      RGB[2],
-      0.6);
+      RGB[2]);
     
     x += xLegendOffset;
 
@@ -135,4 +134,5 @@ void bar(BarData* bd)
 
   WW(file, topHeaderFormatStop);
   return;
-} 
+}
+*/

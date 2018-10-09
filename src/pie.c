@@ -1,6 +1,7 @@
 #include "cgraphlib.h"
 #include "cgraphlib-other.h"
 
+/*
 void pie(PieData* pd)
 {
   FILE* file = fopen(pd->fileName, "wb");
@@ -30,7 +31,7 @@ void pie(PieData* pd)
 
   uint8_t largeArcFlag;
 
-  if(sum == 1.0)
+  if(roundf(sum * 100) / 100 == 1.0)
   {
     float sumSoFar = 0.0;
 
@@ -73,19 +74,7 @@ void pie(PieData* pd)
         RGB[0],
         RGB[1],
         RGB[2],
-        0.75);
-
-      WW(file, arc,
-        xStart,
-        yStart,
-        radius,
-        radius,
-        largeArcFlag,
-        xStop,
-        yStop,
-        RGB[0],
-        RGB[1],
-        RGB[2]);
+        1.0);
     }
   }
   else
@@ -97,3 +86,4 @@ void pie(PieData* pd)
 
   fclose(file);
 }
+*/

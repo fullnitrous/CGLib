@@ -1,151 +1,73 @@
 #include "cgraphlib.h"
 #include "cgraphlib-other.h"
 
-void graph(GraphData* gd)
+void graph(struct graph_data* gd)
 {
-  float margin = gd->margin;
-  
-  FILE* file = fopen(gd->fileName, "wb");
+  FILE* file = fopen(gd->general->file_name, "wb");
 
-  WW(file, topHeaderFormat, 
-    gd->viewportX + margin, gd->viewportY + margin, 
-    gd->strokeWidth,
-    gd->bgRGBA[0],
-    gd->bgRGBA[1],
-    gd->bgRGBA[2]); 
+  fprintf(file, 
+    svg_top_header_start, 
+    gd->general->viewport_x + gd->general->margin, 
+    gd->general->viewport_y + gd->general->margin, 
+    gd->general->stroke_width);
 
-  gd->viewportY -= 40 * gd->nLines;
-
-  WW(file, pointsGroupStart,
-    gd->axelRGBA[0],
-    gd->axelRGBA[1],
-    gd->axelRGBA[2],
-    gd->axelRGBA[0],
-    gd->axelRGBA[1],
-    gd->axelRGBA[2]);
-
-  float yAxelxOffset = gd->viewportX * gd->quadPercent[0];
-  float xAxelyOffset = gd->viewportY * gd->quadPercent[1];
-
-  int n1 = gd->viewportX / gd->xInterval;
-
-  float counter = margin / 2.0;
-  float add     = (gd->viewportX) / (n1 * 1.0);
-
-  //x axel
-  for(int i = 0; i < n1 - 1; i++)
-  {
-    counter += add;
-    WW(file, point, counter, gd->viewportY + margin / 2.0 - xAxelyOffset);
-  }
-
-  //y axel
-  int n2  = gd->viewportY / gd->yInterval;
-  counter = margin / 2.0;
-  add = (gd->viewportY) / (n2 * 1.0);
-  for(int i = 0; i < n2 - 1; i++)
-  {
-    counter += add;
-    WW(file, point, margin / 2.0 + yAxelxOffset, counter);
-  }
-
-  WW(file, pointsGroupStop);
-
-  //yaxel
-  WW(file, axel,
-    margin / 2.0 + yAxelxOffset, //x
-    margin / 2.0, //y
-    margin / 2.0 + yAxelxOffset, //x
-    gd->viewportY + margin / 2.0,//y
-    gd->axelRGBA[0],
-    gd->axelRGBA[1],
-    gd->axelRGBA[2]);
-
-  //xaxel
-  WW(file, axel,
-    margin / 2.0, //x
-    gd->viewportY + margin / 2.0 - xAxelyOffset, //y
-    gd->viewportX + margin / 2.0, //x
-    gd->viewportY + margin / 2.0 - xAxelyOffset, //y
-    gd->axelRGBA[0],
-    gd->axelRGBA[1],
-    gd->axelRGBA[2]);
-  
-  //lines
-  
   char* format;
 
-  float step2 = 40.0;
-  
-  float yOffset = gd->viewportY;
+  float yOffset = gd->general->viewport_y;
 
-  float xLegendOffset = 20.0;
+  float y_axel_x_offset = (gd->axel_data->h[0] < 0) ? 
+                          gd->general->viewport_y * (gd->axel_data->h[0] / (gd->axel_data->h[0] - gd->axel_data->h[1])) : 0;
 
-  float count = step2;
+  float x_axel_y_offset = (gd->axel_data->w[0] < 0) ?
+                          gd->general->viewport_x * (gd->axel_data->w[0] / (gd->axel_data->w[0] - gd->axel_data->w[1])) : 0;
 
+  float x;
+  float y;
 
-  for(int i = 0; i < gd->nLines; i++)
+  draw_axis_horizontals(file, x_axel_y_offset, y_axel_x_offset, gd->general, gd->axel_data);
+
+  for(int i = 0; i < gd->n_lines; i++)
   {
-    float x = margin * 2;
-    float y = yOffset + count;
-    
-    x += xLegendOffset;
-
-    //add legend here
-
-    WW(file, text,
-      x,
-      y,
-      gd->lines[i].name // add later
-      );
-    count += step2;
-
-    if(gd->lines[i].graphType == 0)
+    if(gd->lines[i].graph_type == 0)
     {
-      format = malloc(strlen("%9.6f, %9.6f "));
-      strcpy(format, "%9.6f, %9.6f ");
-      WW(file, lineStart, 
-        gd->lines[i].strokeRGBA[0], 
-        gd->lines[i].strokeRGBA[1], 
-        gd->lines[i].strokeRGBA[2]);
+      format = malloc(strlen(svg_p_line_point));
+      strcpy(format, svg_p_line_point);
+      fprintf(file, svg_p_line_start, 
+        gd->lines[i].stroke_rgb[0], 
+        gd->lines[i].stroke_rgb[1], 
+        gd->lines[i].stroke_rgb[2]);
     }
     else
     {
-      format = malloc(strlen(gpoint));
-      strcpy(format, gpoint);
-      WW(file, pointsGroupStart,
-        gd->lines[i].strokeRGBA[0], 
-        gd->lines[i].strokeRGBA[1], 
-        gd->lines[i].strokeRGBA[2],
-        gd->lines[i].strokeRGBA[0],     
-        gd->lines[i].strokeRGBA[1], 
-        gd->lines[i].strokeRGBA[2]);
+      format = malloc(strlen(svg_g_point));
+      strcpy(format, svg_g_point);
+      fprintf(file, svg_points_group_start,
+        gd->lines[i].stroke_rgb[0], 
+        gd->lines[i].stroke_rgb[1], 
+        gd->lines[i].stroke_rgb[2],
+        gd->lines[i].stroke_rgb[0],     
+        gd->lines[i].stroke_rgb[1], 
+        gd->lines[i].stroke_rgb[2]);
     }
-    for(int k = 0; k < gd->lines[i].points; k++)
+    for(int k = 0; k < gd->lines[i].n_points; k++)
     {
-      float x = margin / 2.0 + gd->lines[i].line[k].x * gd->xInterval + yAxelxOffset;
-      float y = gd->viewportY - gd->lines[i].line[k].y * gd->yInterval + margin / 2.0 - xAxelyOffset;
+      x = gd->general->margin / 2.0 
+        + gd->lines[i].points[k].x
+        * ((gd->general->viewport_x) / (gd->axel_data->w[1] - gd->axel_data->w[0]))
+        + x_axel_y_offset;
 
-      if(gd->viewportX >= x && 0 <= x && gd->viewportY >= y && 0 <= y)
-      {
-        WW(file, format, x, y);
-      }
+      y = gd->general->margin / 2.0
+        - gd->lines[i].points[k].y
+        * ((gd->general->viewport_y) / (gd->axel_data->h[1] - gd->axel_data->h[0]))
+        + gd->general->viewport_y 
+        - y_axel_x_offset;
+
+      fprintf(file, format, x, y);
     }
-    if(gd->lines[i].graphType == 0)
-    {
-      WW(file, lineEnd);
-    }
-    else
-    {
-      WW(file, pointsGroupStop);
-    }
+    (gd->lines[i].graph_type == 0) ? fprintf(file, svg_p_line_stop) : fprintf(file, svg_points_group_stop);
   }
-
   free(format);
-
-  //generates the svg header stop
-  WW(file, topHeaderFormatStop);
-  
+  fprintf(file, svg_top_header_stop);
   fclose(file);
   return;
 }

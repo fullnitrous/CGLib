@@ -12,36 +12,45 @@
 
   #define PI 3.14159265
 
-  typedef struct point
+  struct general_data
+  {
+    char* file_name;
+    int   stroke_width;
+    float margin;
+    float viewport_x; 
+    float viewport_y;
+  };
+
+  struct axel_data
+  {
+    uint8_t axel_rgb[3];
+    int     n_measure_points;
+    float   w[2];
+    float   h[2];
+  };
+
+  struct point
   {
     float x;
     float y;
-  } Point;
+  } point;
 
-  typedef struct line
+  struct line
   {
-    Point*  line;
-    int     graphType;
-    int     points;
+    struct point*  points;
+    int     graph_type;
+    int     n_points;
     char*   name;
-    uint8_t strokeRGBA[3];
-  } Line;
+    uint8_t stroke_rgb[3];
+  };
 
-  typedef struct graphData
+  struct graph_data
   {
-    Line*   lines;
-    char*   fileName;
-    int     nLines;
-    int     strokeWidth;
-    float   viewportX; 
-    float   viewportY;
-    float   xInterval;
-    float   yInterval;
-    float   quadPercent[2];
-    uint8_t bgRGBA[3];
-    uint8_t axelRGBA[3];
-    float   margin;
-  } GraphData;
+    struct line*   lines;
+    int     n_lines;
+    struct general_data* general;
+    struct axel_data* axel_data;
+  };
 
   typedef struct pieSlice
   {
@@ -52,12 +61,6 @@
   {
     PieSlice* slices;
     int       nSlices;
-    char*     fileName;
-    int       strokeWidth;
-    float     viewportX; 
-    float     viewportY;
-    uint8_t   bgRGBA[3];
-    float     margin;
   } PieData;
 
   typedef struct bar
@@ -70,21 +73,10 @@
   {
     Bar*      bars;
     int       nBars;
-    char*     fileName;
-    int       strokeWidth;
-    float     viewportX; 
-    float     viewportY;
     float     standardRatio;
-    float     minW;
-    float     maxW;
-    float     yInterval;
-    float     yMax;
-    uint8_t   bgRGBA[3];
-    uint8_t   axelRGBA[3];
-    float     margin;
   } BarData;
 
-  void graph(GraphData* gd);
-  void pie(PieData*     pd);
-  void bar(BarData*     bd);
+  void graph(struct graph_data* gd);
+  void pie  (PieData*     pd);
+  void bar  (BarData*     bd);
 #endif
