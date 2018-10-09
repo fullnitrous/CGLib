@@ -12,6 +12,12 @@
 
   #define PI 3.14159265
 
+  struct theme_data
+  {
+    uint8_t start_color_rgb[3];
+    uint8_t stop_color_rgb[3];
+  };
+
   struct general_data
   {
     char* file_name;
@@ -52,16 +58,19 @@
     struct axel_data* axel_data;
   };
 
-  typedef struct pieSlice
+  struct pie_slice
   {
     float percentage;
-  } PieSlice;
+    char* name;
+  };
   
-  typedef struct pieData
+  struct pie_data
   {
-    PieSlice* slices;
-    int       nSlices;
-  } PieData;
+    struct general_data* general;
+    struct pie_slice* slices;
+    struct theme_data* theme;
+    int               n_slices;
+  };
 
   typedef struct bar
   {
@@ -76,7 +85,7 @@
     float     standardRatio;
   } BarData;
 
-  void graph(struct graph_data* gd);
-  void pie  (PieData*     pd);
+  void graph(struct graph_data*   gd);
+  void pie  (struct pie_data*     pd);
   void bar  (BarData*     bd);
 #endif
