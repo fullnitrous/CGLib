@@ -9,14 +9,28 @@ int main(void)
 
   struct general_data* general = malloc(sizeof(struct general_data));
   general->stroke_width = 1;
-  general->margin = 20;
+  general->margin = 100;
   general->viewport_x = 640;
   general->viewport_y = 360;
+  general->font_size = 10;
 
   struct axel_data* axel = malloc(sizeof(struct axel_data));
-  axel->axel_rgb[0] = 0;
-  axel->axel_rgb[1] = 0;
-  axel->axel_rgb[2] = 0;
+  axel->axel_rgb[0] = 100;
+  axel->axel_rgb[1] = 100;
+  axel->axel_rgb[2] = 100;
+
+  axel->axel_lines_rgb[0] = 220;
+  axel->axel_lines_rgb[1] = 220;
+  axel->axel_lines_rgb[2] = 220;
+
+  axel->horizontal_lines = 1;
+  axel->vertical_lines = 1;
+  axel->numbered_x = 1;
+  axel->numbered_y = 1;
+
+  axel->x_axel_text_angle = -30.0;
+
+  axel->axel_number_offset = 5.0;
   
   axel->n_measure_points = 10;
 
@@ -64,14 +78,14 @@ int main(void)
   {
     count += 0.5;
     gp->lines[0].points[i + 40].x = count;
-    gp->lines[0].points[i + 40].y = count * count;
+    gp->lines[0].points[i + 40].y = (2 * count * count * count) - (3 * count * count);
   }
   count = -20;
   for(int i = -40; i < 40; i++)
   {
     count += 0.5;
     gp->lines[1].points[i + 40].x = count;
-    gp->lines[1].points[i + 40].y = -count * count;
+    gp->lines[1].points[i + 40].y = -count * count * count;
   }
   graph(gp);
 
@@ -88,12 +102,12 @@ int main(void)
   strcpy(general->file_name, "bin/pie.svg\0");
   pd->general = general;
   pd->theme = theme;
-  pd->n_slices = 20;
+  pd->n_slices = 5;
   pd->slices = malloc(sizeof(struct pie_slice) * pd->n_slices);
 
   for(int i = 0; i < pd->n_slices; i++)
   {
-    pd->slices[i].percentage = 0.05;
+    pd->slices[i].percentage = 0.2;
     pd->slices[i].name = malloc(6);
     strcpy(pd->slices[i].name, "label\0");
   }
@@ -110,9 +124,10 @@ int main(void)
   bd->axel_data = axel;
   bd->n_bars =  5;
   bd->spacing = 10;
+  axel->numbered_x = 0;
   bd->bars = malloc(sizeof(struct bar) * bd->n_bars);
 
-  axel->w[0] = -10;
+  axel->w[0] = 0;
   axel->w[1] = 50;
   axel->h[0] = -100;
   axel->h[1] = 100;

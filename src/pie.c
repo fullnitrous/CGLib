@@ -39,8 +39,8 @@ void pie(struct pie_data* pd)
   int size;
   char* ret;
 
-  float  pointer_len = 120.0;
-  float  current_pointer_len;
+  float pointer_len = 120.0;
+  float current_pointer_len;
 
   float p_offset_x = pd->general->viewport_x / 2.0 + pd->general->margin / 2.0;
   float p_offset_y = pd->general->viewport_y / 2.0 + pd->general->margin / 2.0;
@@ -51,13 +51,13 @@ void pie(struct pie_data* pd)
 
     for(int i = 0; i < pd->n_slices; i++)
     {
-      large_arc_flag = (pd->slices[i].percentage > 0.5) ? 1 : 0;
+      large_arc_flag  = (pd->slices[i].percentage > 0.5) ? 1 : 0;
 
-      radians_1 = 2 * sum_counter * PI;
-      radians_2 = 2 * (pd->slices[i].percentage + sum_counter) * PI;
-      radians_3 = 2 * (pd->slices[i].percentage / 2 + sum_counter) * PI;
+      radians_1 = 2   * sum_counter * PI;
+      radians_2 = 2   * (pd->slices[i].percentage + sum_counter) * PI;
+      radians_3 = 2   * (pd->slices[i].percentage / 2 + sum_counter) * PI;
 
-      sum_counter += pd->slices[i].percentage;
+      sum_counter     += pd->slices[i].percentage;
 
       x_start         = cos(radians_1) * radius + p_offset_x;
       y_start         = sin(radians_1) * radius + p_offset_y;
@@ -67,9 +67,6 @@ void pie(struct pie_data* pd)
       y_pointer_start = sin(radians_3) * radius + p_offset_y;
       x_percentage    = cos(radians_3) * radius * 0.85 + p_offset_x;
       y_percentage    = sin(radians_3) * radius * 0.85 + p_offset_y;
-
-
-      
 
       fprintf(file, svg_slice,
         x_start,

@@ -25,14 +25,23 @@
     float margin;
     float viewport_x; 
     float viewport_y;
+    int   font_size;
   };
 
   struct axel_data
   {
     uint8_t axel_rgb[3];
+    uint8_t axel_lines_rgb[3];
     int     n_measure_points;
     float   w[2];
     float   h[2];
+    uint8_t vertical_lines;
+    uint8_t horizontal_lines;
+    float   x_axel_text_angle;
+    uint8_t y_axel_text_right;
+    uint8_t numbered_x;
+    uint8_t numbered_y;
+    float axel_number_offset;
   };
 
   struct point

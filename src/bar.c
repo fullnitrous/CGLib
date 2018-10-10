@@ -24,13 +24,21 @@ void bar(struct bar_data* bd)
 
   float height;
   float height_offset;
+  float height_offset_2;
+  float middle;
+  float label_offset = 20.0;
+
+  int size;
+  char* ret;
 
   for(int i = 0; i < bd->n_bars; i++)
   {
     height = (bd->bars[i].value / (bd->axel_data->h[1] - bd->axel_data->h[0])) * bd->general->viewport_y;
 
     height_offset = (height > 0) ? height : 0;
+    height_offset_2 = (height > 0) ? height : height - 20.0;
     height *= (height > 0) ? 1 : -1;
+    label_offset *= (height > 0) ? 1 : -1;
 
     fprintf(file, svg_box,
       0,
@@ -41,10 +49,24 @@ void bar(struct bar_data* bd)
       bar_width,
       height);
 
+    middle = (bd->general->margin / 2.0 + i * x_bar_jump + x_axel_y_offset + bar_width / 2);
+
     fprintf(file, svg_text,
-      (bd->general->margin / 2.0 + i * x_bar_jump + x_axel_y_offset + bar_width / 2),
-      bd->general->margin / 2.0 + bd->general->viewport_y - y_axel_x_offset,
-      "lol");
+      middle,
+      bd->general->margin / 2.0 + bd->general->viewport_y - y_axel_x_offset + label_offset,
+      bd->bars[i].name);
+
+    size = snprintf(NULL, 0, "%9.1f",  bd->bars[i].value);
+    ret = malloc(sizeof(char) * (size + 1));
+    snprintf(ret, size, "%9.1f", bd->bars[i].value);
+    ret[size] = '\0';
+
+    fprintf(file, svg_text, 
+      middle, 
+      bd->general->margin / 2.0 + bd->general->viewport_y - y_axel_x_offset - height_offset_2, 
+      ret);
+
+    free(ret);
   }
 
   fprintf(file, svg_top_header_stop);

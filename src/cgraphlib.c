@@ -26,76 +26,174 @@ void draw_axis_horizontals(FILE* file, float x_axel_y_offset, float y_axel_x_off
 {
   int size;
   char* ret;
+  char* ret_2;
 
-  //draw vertical lines with corresponding numbers
+  size = snprintf(NULL, 0, "stroke = \"#%02x%02x%02x\"", 
+  ad->axel_lines_rgb[0],
+  ad->axel_lines_rgb[1],
+  ad->axel_lines_rgb[2]);
+  ret = malloc(sizeof(char) * (size + 1));
+  snprintf(ret, size, "stroke = \"#%02x%02x%02x\"", 
+  ad->axel_lines_rgb[0],
+  ad->axel_lines_rgb[1],
+  ad->axel_lines_rgb[2]);
+  ret[size] = '\0';
+
+  fprintf(file, svg_custom_group, ret);
+
+  free(ret);
+
   float add = gd->viewport_x / ad->n_measure_points;
-  float a_add = (ad->w[1] - ad->w[0]) / ad->n_measure_points;
   float counter = 0;
-  float a_counter = ad->w[0];
-  for(int i = 0; i < ad->n_measure_points + 1; i++)
+
+  if(ad->vertical_lines)
   {
-    fprintf(file, svg_line, 
-      gd->margin / 2.0 + counter, 
-      gd->margin / 2.0, 
-      gd->margin / 2.0 + counter,
-      gd->margin / 2.0 + gd->viewport_y);
-
-    size = snprintf(NULL, 0, "%9.2f", a_counter);
-    ret = malloc(sizeof(char) * (size + 1));
-    snprintf(ret, size, "%9.2f", a_counter);
-    ret[size] = '\0';
+    //draw vertical lines with corresponding numbers
     
-    fprintf(file, svg_text, 
-      gd->margin / 2.0 + counter,
-      gd->margin / 2.0 + gd->viewport_y - y_axel_x_offset,
-      ret);
-    
-    free(ret);
+    for(int i = 0; i < ad->n_measure_points + 1; i++)
+    {
+      fprintf(file, svg_line, 
+        gd->margin / 2.0 + counter, 
+        gd->margin / 2.0, 
+        gd->margin / 2.0 + counter,
+        gd->margin / 2.0 + gd->viewport_y);
 
-    counter += add;
-    a_counter += a_add;
+      counter += add;
+    }
   }
+
+  if(ad->horizontal_lines)
+  {
+    //draw horizontal lines with corresponding numbers
+    add = gd->viewport_y / ad->n_measure_points;
+    counter = 0;
+    for(int i = 0; i < ad->n_measure_points + 1; i++)
+    {
+      fprintf(file, svg_line, 
+        gd->margin / 2.0, 
+        gd->margin / 2.0 + gd->viewport_y - counter, 
+        gd->margin / 2.0 + gd->viewport_x, 
+        gd->margin / 2.0 + gd->viewport_y - counter);
+
+      counter += add;
+    }
+  }
+
+  fprintf(file, svg_group_stop);
+
+  float a_add = (ad->w[1] - ad->w[0]) / ad->n_measure_points;
+  float a_counter = ad->w[0];
+  counter =  0;
+  add = gd->viewport_x / ad->n_measure_points;
+  
+  if(ad->numbered_x)
+  {
+    size = snprintf(NULL, 0, "text-anchor = \"end\" dominant-baseline=\"hanging\" font-size=\"%d\"", gd->font_size);
+    ret = malloc(sizeof(char) * (size + 1));
+    snprintf(ret, size, "text-anchor = \"end\" dominant-baseline=\"hanging\" font-size=\"%d\"", gd->font_size);
+    ret[size] = '\0';
+
+    fprintf(file, svg_custom_group, ret);
+    for(int i = 0; i < ad->n_measure_points + 1; i++)
+    {
+      size = snprintf(NULL, 0, "%9.2f", a_counter);
+      ret = malloc(sizeof(char) * (size + 1));
+      snprintf(ret, size, "%9.2f", a_counter);
+      ret[size] = '\0';
+
+      size = snprintf(NULL, 0, "transform=\"rotate(%9.6f, %9.6f, %9.6f)\"", 
+      ad->x_axel_text_angle,
+      gd->margin / 2.0 + counter,
+      gd->margin / 2.0 + gd->viewport_y - y_axel_x_offset);
+
+
+      ret_2 = malloc(sizeof(char) * (size + 1));
+      snprintf(ret_2, size, "transform=\"rotate(%9.6f, %9.6f, %9.6f)\"",
+      ad->x_axel_text_angle,
+      gd->margin / 2.0 + counter,
+      gd->margin / 2.0 + gd->viewport_y - y_axel_x_offset);
+
+
+      ret_2[size] = '\0';
+      
+      fprintf(file, svg_custom_text, 
+        gd->margin / 2.0 + counter,
+        gd->margin / 2.0 + gd->viewport_y - y_axel_x_offset + ad->axel_number_offset,
+        ret_2,
+        ret);
+
+      counter += add;
+      a_counter += a_add;
+      
+      free(ret);
+      free(ret_2);
+    }
+    fprintf(file, svg_group_stop);
+  }
+
+  counter = 0;
 
   a_add = (ad->h[1] - ad->h[0]) / ad->n_measure_points;
   a_counter = ad->h[0];
-
-  //draw horizontal lines with corresponding numbers
   add = gd->viewport_y / ad->n_measure_points;
-  counter = 0;
-  for(int i = 0; i < ad->n_measure_points + 1; i++)
-  {
-    fprintf(file, svg_line, 
-      gd->margin / 2.0, 
-      gd->margin / 2.0 + gd->viewport_y - counter, 
-      gd->margin / 2.0 + gd->viewport_x, 
-      gd->margin / 2.0 + gd->viewport_y - counter);
 
-    size = snprintf(NULL, 0, "%9.2f", a_counter);
+  if(ad->numbered_y)
+  {
+    size = snprintf(NULL, 0, "text-anchor = \"end\" font-size=\"%d\"", gd->font_size);
     ret = malloc(sizeof(char) * (size + 1));
-    snprintf(ret, size, "%9.2f", a_counter);
+    snprintf(ret, size, "text-anchor = \"end\" font-size=\"%d\"", gd->font_size);
     ret[size] = '\0';
 
-    fprintf(file, svg_text, 
-      gd->margin / 2.0 + x_axel_y_offset,
-      gd->margin / 2.0 + gd->viewport_y - counter,
-      ret);
+    fprintf(file, svg_custom_group, ret);
+    for(int i = 0; i < ad->n_measure_points + 1; i++)
+    {
+      size = snprintf(NULL, 0, "%9.2f", a_counter);
+      ret = malloc(sizeof(char) * (size + 1));
+      snprintf(ret, size, "%9.2f", a_counter);
+      ret[size] = '\0';
 
-    counter += add;
-    a_counter += a_add;
+      fprintf(file, svg_text, 
+        gd->margin / 2.0 + x_axel_y_offset + ad->axel_number_offset * -1,
+        gd->margin / 2.0 + gd->viewport_y - counter,
+        ret);
+
+      counter += add;
+      a_counter += a_add;
+      
+      free(ret);
+    }
+    fprintf(file, svg_group_stop);
   }
 
+  size = snprintf(NULL, 0, "stroke = \"#%02x%02x%02x\"", 
+  ad->axel_rgb[0],
+  ad->axel_rgb[1],
+  ad->axel_rgb[2]);
+  ret = malloc(sizeof(char) * (size + 1));
+  snprintf(ret, size, "stroke = \"#%02x%02x%02x\"", 
+  ad->axel_rgb[0],
+  ad->axel_rgb[1],
+  ad->axel_rgb[2]);
+  ret[size] = '\0';
+
+  fprintf(file, svg_custom_group, ret);
+
+  free(ret);
+
   //draw the y axel
-  fprintf(file, svg_axel, 
+  fprintf(file, svg_line, 
     gd->margin / 2.0 + x_axel_y_offset, 
     gd->margin / 2.0, 
     gd->margin / 2.0 + x_axel_y_offset,
     gd->margin / 2.0 + gd->viewport_y);
 
   //draw the x axel
-  fprintf(file, svg_axel, 
+  fprintf(file, svg_line, 
     gd->margin / 2.0, 
     gd->margin / 2.0 + gd->viewport_y - y_axel_x_offset, 
     gd->margin / 2.0 + gd->viewport_x, 
     gd->margin / 2.0 + gd->viewport_y - y_axel_x_offset);
+
+  fprintf(file, svg_group_stop);
   return;
 }
