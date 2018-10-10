@@ -72,20 +72,23 @@
     int               n_slices;
   };
 
-  typedef struct bar
+  struct bar
   {
     float value;
     char* name;
-  } Bar;
+  };
 
-  typedef struct BarData
+  struct bar_data
   {
-    Bar*      bars;
-    int       nBars;
-    float     standardRatio;
-  } BarData;
+    struct general_data* general;
+    struct theme_data* theme;
+    struct axel_data* axel_data;
+    struct bar*  bars;
+    int   n_bars;
+    float spacing;
+  };
 
   void graph(struct graph_data*   gd);
   void pie  (struct pie_data*     pd);
-  void bar  (BarData*     bd);
+  void bar  (struct bar_data*     bd);
 #endif

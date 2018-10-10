@@ -20,8 +20,8 @@ int main(void)
   
   axel->n_measure_points = 10;
 
-  axel->w[0] = 0;
-  axel->w[1] = 50;
+  axel->w[0] = -25;
+  axel->w[1] = 25;
   axel->h[0] = -100;
   axel->h[1] = 200;
 
@@ -88,12 +88,12 @@ int main(void)
   strcpy(general->file_name, "bin/pie.svg\0");
   pd->general = general;
   pd->theme = theme;
-  pd->n_slices = 5;
+  pd->n_slices = 20;
   pd->slices = malloc(sizeof(struct pie_slice) * pd->n_slices);
 
   for(int i = 0; i < pd->n_slices; i++)
   {
-    pd->slices[i].percentage = 0.2;
+    pd->slices[i].percentage = 0.05;
     pd->slices[i].name = malloc(6);
     strcpy(pd->slices[i].name, "label\0");
   }
@@ -101,6 +101,30 @@ int main(void)
   pie(pd);
 
 
+
+  /* bar chart */
+  struct bar_data* bd = malloc(sizeof(struct bar_data));
+  strcpy(general->file_name, "bin/bar.svg\0");
+  bd->general = general;
+  bd->theme = theme;
+  bd->axel_data = axel;
+  bd->n_bars =  5;
+  bd->spacing = 10;
+  bd->bars = malloc(sizeof(struct bar) * bd->n_bars);
+
+  axel->w[0] = -10;
+  axel->w[1] = 50;
+  axel->h[0] = -100;
+  axel->h[1] = 100;
+
+  for(int i = 0; i < bd->n_bars; i++)
+  {
+    bd->bars[i].value = 50.0 - i * 25.0;
+    bd->bars[i].name = malloc(6);
+    strcpy(bd->bars[i].name, "label\0");
+  }
+
+  bar(bd);
 
   //maybe care to free later
 

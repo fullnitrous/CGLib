@@ -39,7 +39,7 @@ void pie(struct pie_data* pd)
   int size;
   char* ret;
 
-  float  pointer_len = 80.0;
+  float  pointer_len = 120.0;
   float  current_pointer_len;
 
   float p_offset_x = pd->general->viewport_x / 2.0 + pd->general->margin / 2.0;
