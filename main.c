@@ -12,7 +12,7 @@ int main(void)
   general->margin = 100;
   general->viewport_x = 640;
   general->viewport_y = 360;
-  general->font_size = 10;
+  general->font_size = 12;
 
   struct axel_data* axel = malloc(sizeof(struct axel_data));
   axel->axel_rgb[0] = 100;
@@ -100,6 +100,7 @@ int main(void)
   free(general->file_name);
   general->file_name = malloc(sizeof(char) * 12);
   strcpy(general->file_name, "bin/pie.svg\0");
+  general->margin = 20.0;
   pd->general = general;
   pd->theme = theme;
   pd->n_slices = 5;
@@ -120,9 +121,10 @@ int main(void)
   struct bar_data* bd = malloc(sizeof(struct bar_data));
   strcpy(general->file_name, "bin/bar.svg\0");
   bd->general = general;
+  general->margin = 100;
   bd->theme = theme;
   bd->axel_data = axel;
-  bd->n_bars =  5;
+  bd->n_bars =  6;
   bd->spacing = 10;
   axel->numbered_x = 0;
   bd->bars = malloc(sizeof(struct bar) * bd->n_bars);
