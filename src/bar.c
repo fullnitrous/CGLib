@@ -48,10 +48,14 @@ void bar(struct bar_data* bd)
     height_offset_2 = (height > 0) ? height : height - 20.0;
     height *= (height > 0) ? 1 : -1;
 
+    bd->theme->percentage = (i + 1) / (bd->n_bars* 1.0);
+    
+    calculate_color(bd->theme);
+
     fprintf(file, svg_box,
-      0,
-      0,
-      0,
+      bd->theme->out_color_rgb[0],
+      bd->theme->out_color_rgb[1],
+      bd->theme->out_color_rgb[2],
       bd->general->margin / 2.0 + i * x_bar_jump + x_axel_y_offset,
       bd->general->margin / 2.0 + bd->general->viewport_y - y_axel_x_offset - height_offset,
       bar_width,

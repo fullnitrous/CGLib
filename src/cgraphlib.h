@@ -16,6 +16,12 @@
   {
     uint8_t start_color_rgb[3];
     uint8_t stop_color_rgb[3];
+    uint8_t out_color_rgb[3];
+    float   percentage;
+
+    int value[2];
+    int hue[2];
+    int saturation[2];
   };
 
   struct general_data
@@ -75,6 +81,7 @@
   
   struct pie_data
   {
+    struct axel_data* axel_data;
     struct general_data* general;
     struct pie_slice* slices;
     struct theme_data* theme;

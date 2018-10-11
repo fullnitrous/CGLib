@@ -40,13 +40,13 @@ int main(void)
   axel->h[1] = 200;
 
   struct theme_data* theme = malloc(sizeof(struct theme_data));
-  theme->start_color_rgb[0] = 134;
-  theme->start_color_rgb[1] = 179;
-  theme->start_color_rgb[2] = 249;
+  theme->stop_color_rgb[0] = 65;
+  theme->stop_color_rgb[1] = 130;
+  theme->stop_color_rgb[2] = 234;
 
-  theme->stop_color_rgb[0] = 0;
-  theme->stop_color_rgb[0] = 87;
-  theme->stop_color_rgb[0] = 224;
+  theme->start_color_rgb[0] = 234;
+  theme->start_color_rgb[1] = 99;
+  theme->start_color_rgb[2] = 175;
 
 
 
@@ -102,13 +102,14 @@ int main(void)
   strcpy(general->file_name, "bin/pie.svg\0");
   general->margin = 20.0;
   pd->general = general;
+  pd->axel_data = axel;
   pd->theme = theme;
-  pd->n_slices = 5;
+  pd->n_slices = 20;
   pd->slices = malloc(sizeof(struct pie_slice) * pd->n_slices);
 
   for(int i = 0; i < pd->n_slices; i++)
   {
-    pd->slices[i].percentage = 0.2;
+    pd->slices[i].percentage = 0.05;
     pd->slices[i].name = malloc(6);
     strcpy(pd->slices[i].name, "label\0");
   }

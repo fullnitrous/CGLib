@@ -197,3 +197,20 @@ void draw_axis_horizontals(FILE* file, float x_axel_y_offset, float y_axel_x_off
   fprintf(file, svg_group_stop);
   return;
 }
+
+void calculate_color(struct theme_data* td)
+{
+  int delta;
+  int delta_index;
+  int8_t flip = 1;
+
+  for(int i = 0; i < 3; i++)
+  {
+    delta = td->stop_color_rgb[i] - td->start_color_rgb[i];
+    delta *= (delta < 0) ? -1 : 1;
+    flip = (td->start_color_rgb[i] > td->stop_color_rgb[i]) ? -1 : 1;
+    delta_index = delta * td->percentage;
+    td->out_color_rgb[i] = td->start_color_rgb[i] + delta_index * flip;
+  }
+  return;
+}

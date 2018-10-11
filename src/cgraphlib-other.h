@@ -24,6 +24,7 @@
   static const char* svg_group_stop = "</g>";
 
   uint8_t getRandByte(void);
-  void draw_axis_horizontals(FILE* file, float x_axel_y_offset, float y_axel_x_offset, struct general_data* gd, struct axel_data* ad);  
+  void draw_axis_horizontals(FILE* file, float x_axel_y_offset, float y_axel_x_offset, struct general_data* gd, struct axel_data* ad);
+  void calculate_color(struct theme_data* td);  
 
 #endif
