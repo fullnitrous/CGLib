@@ -36,7 +36,7 @@ int main(void)
 
   axel->w[0] = -25;
   axel->w[1] = 25;
-  axel->h[0] = -100;
+  axel->h[0] = -200;
   axel->h[1] = 200;
 
   struct theme_data* theme = malloc(sizeof(struct theme_data));
@@ -109,12 +109,12 @@ int main(void)
   pd->general = general;
   pd->axel_data = axel;
   pd->theme = theme;
-  pd->n_slices = 20;
+  pd->n_slices = 8;
   pd->slices = malloc(sizeof(struct pie_slice) * pd->n_slices);
 
   for(int i = 0; i < pd->n_slices; i++)
   {
-    pd->slices[i].percentage = 0.05;
+    pd->slices[i].percentage = 1.0 / pd->n_slices;
     pd->slices[i].name = malloc(6);
     strcpy(pd->slices[i].name, "label\0");
   }

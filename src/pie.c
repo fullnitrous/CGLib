@@ -3,7 +3,8 @@
 
 void pie(struct pie_data* pd)
 {
-  float overlap = 0.1;
+  //making this number 2 above or very near 2 can cause visual bugs
+  float percentage_overlap_multiplier = 1.9;
   float pointer_len = 120.0;
 
   FILE* file = fopen(pd->general->file_name, "wb");
@@ -61,16 +62,22 @@ void pie(struct pie_data* pd)
 
   uint8_t calculated_rgb[3];
 
-  if(roundf(sum * 100) / 100 == 1.0)
+  if(roundf(sum * 100) / 100 == 1.0 && pd->n_slices >= 3)
   {
     sum_counter = 0.0;
     fprintf(file, svg_limiter_box);
-    for(int i = 0; i < pd->n_slices; i++)
+
+    int i = 0;
+    float store_slice_0 = pd->slices[0].percentage;
+    int   store_n_slices = pd->n_slices;
+    uint8_t print_first = 1;
+    LOL:
+    for(i; i < pd->n_slices; i++)
     {
       large_arc_flag  = (pd->slices[i].percentage > 0.5) ? 1 : 0;
 
       radians_1 = 2   * sum_counter * PI;
-      radians_2 = 2   * (pd->slices[i].percentage + sum_counter /*+ overlap*/) * PI;
+      radians_2 = 2   * (pd->slices[i].percentage * percentage_overlap_multiplier + sum_counter) * PI;
       radians_3 = 2   * (pd->slices[i].percentage / 2 + sum_counter) * PI;
 
       sum_counter     += pd->slices[i].percentage;
@@ -80,7 +87,7 @@ void pie(struct pie_data* pd)
       x_stop          = cos(radians_2) * radius + p_offset_x;
       y_stop          = sin(radians_2) * radius + p_offset_y;
 
-      pd->theme->percentage = (i + 1) / (pd->n_slices * 1.0);
+      pd->theme->percentage = (i + 1) / (store_n_slices * 1.0);
 
       calculate_color(pd->theme);
 
@@ -97,6 +104,21 @@ void pie(struct pie_data* pd)
         pd->theme->out_color_rgb[0],
         pd->theme->out_color_rgb[1],
         pd->theme->out_color_rgb[2]);
+    }
+
+    if(print_first)
+    {
+      print_first = 0;
+      i = 0;
+      pd->n_slices = 1;
+      sum_counter = 0.0;
+      percentage_overlap_multiplier = 1.0;
+      goto LOL;
+    }
+    else
+    {
+      pd->slices[0].percentage = store_slice_0;
+      pd->n_slices = store_n_slices;
     }
 
     fprintf(file, svg_custom_group, "stroke=\"black\"");
