@@ -5,10 +5,15 @@ void bar(struct bar_data* bd)
 {
   FILE* file = fopen(bd->general->file_name, "wb");
 
-  fprintf(file, svg_top_header_start, 
+  fprintf(file, 
+    svg_top_header_start, 
     bd->general->viewport_x + bd->general->margin, 
     bd->general->viewport_y + bd->general->margin, 
-    bd->general->stroke_width);
+    bd->general->stroke_width,
+    bd->general->margin / 2.0,
+    bd->general->margin / 2.0,
+    bd->general->viewport_x, 
+    bd->general->viewport_y);
 
   float y_axel_x_offset = (bd->axel_data->h[0] < 0) ? 
                           bd->general->viewport_y * (bd->axel_data->h[0] / (bd->axel_data->h[0] - bd->axel_data->h[1])) : 0;
@@ -39,7 +44,9 @@ void bar(struct bar_data* bd)
   fprintf(file, svg_custom_group, ret);
 
   free(ret);
-
+  
+  fprintf(file, svg_limiter_box);
+  
   for(int i = 0; i < bd->n_bars; i++)
   {
     height = (bd->bars[i].value / (bd->axel_data->h[1] - bd->axel_data->h[0])) * bd->general->viewport_y;
@@ -75,6 +82,8 @@ void bar(struct bar_data* bd)
 
     free(ret);
   }
+
+  fprintf(file, svg_group_stop);
 
   uint8_t s = 1;
   int8_t m = 1;

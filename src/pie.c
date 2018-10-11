@@ -3,14 +3,20 @@
 
 void pie(struct pie_data* pd)
 {
-  //float overlap = 0.001;
+  float overlap = 0.1;
   float pointer_len = 120.0;
 
   FILE* file = fopen(pd->general->file_name, "wb");
 
-  fprintf(file, svg_top_header_start, 
-    pd->general->viewport_x + pd->general->margin, pd->general->viewport_y + pd->general->margin, 
-    pd->general->stroke_width);
+  fprintf(file, 
+    svg_top_header_start, 
+    pd->general->viewport_x + pd->general->margin, 
+    pd->general->viewport_y + pd->general->margin, 
+    pd->general->stroke_width,
+    pd->general->margin / 2.0,
+    pd->general->margin / 2.0,
+    pd->general->viewport_x, 
+    pd->general->viewport_y);
 
 
   float radius = (pd->general->viewport_y <= pd->general->viewport_x) ? (pd->general->viewport_y - pd->general->margin) / 2 : (pd->general->viewport_x - pd->general->margin) / 2;
@@ -58,7 +64,7 @@ void pie(struct pie_data* pd)
   if(roundf(sum * 100) / 100 == 1.0)
   {
     sum_counter = 0.0;
-
+    fprintf(file, svg_limiter_box);
     for(int i = 0; i < pd->n_slices; i++)
     {
       large_arc_flag  = (pd->slices[i].percentage > 0.5) ? 1 : 0;
@@ -224,6 +230,7 @@ void pie(struct pie_data* pd)
 
       free(ret);
     }
+    fprintf(file, svg_group_stop);
     fprintf(file, end_width);
     fprintf(file, svg_group_stop);
   }

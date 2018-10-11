@@ -67,8 +67,13 @@ int main(void)
   gp->lines[0].graph_type = 0;
   gp->lines[1].graph_type = 1;
 
-  gp->lines[0].stroke_rgb[0] = gp->lines[0].stroke_rgb[1] = gp->lines[0].stroke_rgb[2] =
-  gp->lines[1].stroke_rgb[0] = gp->lines[1].stroke_rgb[1] = gp->lines[1].stroke_rgb[2] = 0;
+  gp->lines[0].stroke_rgb[0] = 255;
+  gp->lines[0].stroke_rgb[1] = 0;
+  gp->lines[0].stroke_rgb[2] = 0;
+  
+  gp->lines[1].stroke_rgb[0] = 0;
+  gp->lines[1].stroke_rgb[1] = 0;
+  gp->lines[1].stroke_rgb[2] = 255;
 
   gp->lines[0].points = malloc(sizeof(struct point) * gp->lines[0].n_points);
   gp->lines[1].points = malloc(sizeof(struct point) * gp->lines[1].n_points);
@@ -78,7 +83,7 @@ int main(void)
   {
     count += 0.5;
     gp->lines[0].points[i + 40].x = count;
-    gp->lines[0].points[i + 40].y = (2 * count * count * count) - (3 * count * count);
+    gp->lines[0].points[i + 40].y = count * count;
   }
   count = -20;
   for(int i = -40; i < 40; i++)
@@ -100,7 +105,7 @@ int main(void)
   free(general->file_name);
   general->file_name = malloc(sizeof(char) * 12);
   strcpy(general->file_name, "bin/pie.svg\0");
-  general->margin = 20.0;
+  general->margin = 30.0;
   pd->general = general;
   pd->axel_data = axel;
   pd->theme = theme;

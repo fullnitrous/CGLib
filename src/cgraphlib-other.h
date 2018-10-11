@@ -4,7 +4,8 @@
 #ifndef C_GRAPH_LIB_OTHER
   #define C_GRAPH_LIB_OTHER
   
-  static const char* svg_top_header_start = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?><svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" viewBox=\"0 0 %9.6f %9.6f\" stroke-width=\"%d\">";
+  static const char* svg_top_header_start = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?><svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" viewBox=\"0 0 %9.6f %9.6f\" stroke-width=\"%d\"><defs><clipPath id=\"fuckyou\"><rect x=\"%9.6f\" y=\"%9.6f\" width=\"%9.6f\" height=\"%9.6f\"/></clipPath></defs>";
+  static const char* svg_limiter_box = "<g clip-path=\"url(#fuckyou)\">";
   static const char* svg_top_header_stop = "</svg>";
   static const char* svg_points_group_start = "<g font-size=\"10\" text-anchor=\"start\" stroke-width=\"1\" stroke =\"#%02x%02x%02x\" fill=\"#%02x%02x%02x\">";
   static const char* svg_points_group_stop = "</g>";

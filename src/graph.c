@@ -9,7 +9,11 @@ void graph(struct graph_data* gd)
     svg_top_header_start, 
     gd->general->viewport_x + gd->general->margin, 
     gd->general->viewport_y + gd->general->margin, 
-    gd->general->stroke_width);
+    gd->general->stroke_width,
+    gd->general->margin / 2.0,
+    gd->general->margin / 2.0,
+    gd->general->viewport_x, 
+    gd->general->viewport_y);
 
   char* format;
 
@@ -25,6 +29,8 @@ void graph(struct graph_data* gd)
   float y;
 
   draw_axis_horizontals(file, x_axel_y_offset, y_axel_x_offset, gd->general, gd->axel_data);
+
+  fprintf(file, svg_limiter_box);
 
   for(int i = 0; i < gd->n_lines; i++)
   {
@@ -66,6 +72,7 @@ void graph(struct graph_data* gd)
     }
     (gd->lines[i].graph_type == 0) ? fprintf(file, svg_p_line_stop) : fprintf(file, svg_points_group_stop);
   }
+  fprintf(file, svg_group_stop);
   free(format);
   fprintf(file, svg_top_header_stop);
   fclose(file);
