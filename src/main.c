@@ -109,7 +109,7 @@ int main(void)
   pd->general = general;
   pd->axel_data = axel;
   pd->theme = theme;
-  pd->n_slices = 8;
+  pd->n_slices = 15;
   pd->slices = malloc(sizeof(struct pie_slice) * pd->n_slices);
 
   for(int i = 0; i < pd->n_slices; i++)
@@ -140,7 +140,7 @@ int main(void)
   general->margin = 100;
   bd->theme = theme;
   bd->axel_data = axel;
-  bd->n_bars =  6;
+  bd->n_bars =  15;
   bd->spacing = 10;
   axel->numbered_x = 0;
   axel->vertical_lines = 0;
@@ -153,7 +153,7 @@ int main(void)
 
   for(int i = 0; i < bd->n_bars; i++)
   {
-    bd->bars[i].value = 50.0 - i * 25.0;
+    bd->bars[i].value = 50.0 - i * 10;
     bd->bars[i].name = malloc(6);
     strcpy(bd->bars[i].name, "Label\0");
   }
