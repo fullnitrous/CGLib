@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "src/cgraphlib.h"
+#include "cgraphlib.h"
 
 int main(void)
 {
