@@ -4,7 +4,7 @@
 #ifndef C_GRAPH_LIB_OTHER
   #define C_GRAPH_LIB_OTHER
   
-  static const char* svg_top_header_start = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?><!--THIS DOCUMENT WAS GENERATED WITH CGLIB CREATED BY FULLNITROUS RIGHTS RESERVED TO VOIDZEHN HTTPS://MDPP.XYZ HTTPS://VOIDZEHN.COM HTTPS://CGLIB.XYZ HTTPS://FULLNITROUS.COM--><svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" viewBox=\"0 0 %9.6f %9.6f\" stroke-width=\"%d\"><defs><clipPath id=\"fuckyou\"><rect x=\"%9.6f\" y=\"%9.6f\" width=\"%9.6f\" height=\"%9.6f\"/></clipPath></defs>";
+  static const char* svg_top_header_start = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?><!--THIS DOCUMENT WAS GENERATED WITH CGLIB CREATED BY FULLNITROUS RIGHTS RESERVED TO VOIDZEHN HTTPS://MDPP.XYZ HTTPS://VOIDZEHN.COM HTTPS://CGLIB.XYZ HTTPS://FULLNITROUS.COM--><svg xmlns=\"http://www.w3.org/2000/svg\" style =\"font-family: sans-serif;\" version=\"1.1\" viewBox=\"0 0 %9.6f %9.6f\" stroke-width=\"%d\"><defs><clipPath id=\"fuckyou\"><rect x=\"%9.6f\" y=\"%9.6f\" width=\"%9.6f\" height=\"%9.6f\"/></clipPath></defs>";
   static const char* svg_limiter_box = "<g clip-path=\"url(#fuckyou)\">";
   static const char* svg_custom_mask_box = "<g mask=\"url(#%s)\">";
   static const char* svg_mask_path = "<defs><mask id=\"%s\">%s</mask></defs>";
@@ -18,10 +18,7 @@
   static const char* svg_p_line_stop = "\"/>";
   static const char* svg_line = "<line x1=\"%9.6f\" y1=\"%9.6f\" x2=\"%9.6f\" y2=\"%9.6f\"/>";  
   static const char* svg_slice = "<path d=\"M %9.6f %9.6f A %9.6f %9.6f 0 %d 1 %9.6f %9.6f L %9.6f %9.6f \" fill = \"#%02x%02x%02x\"></path>";
-
-
   static const char* svg_doughnut_section = "<path d=\"M %9.6f %9.6f A %9.6f %9.6f 0 %d 1 %9.6f %9.6f L %9.6f %9.6f A %9.6f %9.6f 0 %d 0 %9.6f %9.6f\" fill=\"#%02x%02x%02x\"></path>";
-
   static const char* svg_arc = "<path d=\"M %9.6f %9.6f A %9.6f %9.6f 0 %d 1 %9.6f %9.6f\" fill = \"none\" stroke = \"#%02x%02x%02x\"></path>";
   static const char* svg_box = "<rect fill=\"#%02x%02x%02x\" x=\"%9.6f\" y=\"%9.6f\" width=\"%9.6f\" height=\"%9.6f\"/>";
   static const char* svg_text = "<text x=\"%9.6f\" y=\"%9.6f\">%s</text>";

@@ -55,8 +55,8 @@ int main(void)
   struct graph_data* gp = malloc(sizeof(struct graph_data));
   gp->general = general;
   gp->axel_data = axel;
-  general->file_name = malloc(sizeof(char) * 14);
-  strcpy(general->file_name, "bin/graph.svg\0");
+  general->file_name = malloc(sizeof(char) * 18);
+  strcpy(general->file_name, "../bin/graph.svg\0");
 
   gp->n_lines = 2;
   gp->lines = malloc(sizeof(struct line) * 2);
@@ -103,8 +103,8 @@ int main(void)
   /* pie chart */
   struct pie_data* pd = malloc(sizeof(struct pie_data));
   free(general->file_name);
-  general->file_name = malloc(sizeof(char) * 12);
-  strcpy(general->file_name, "bin/pie.svg\0");
+  general->file_name = malloc(sizeof(char) * 18);
+  strcpy(general->file_name, "../bin/pie.svg\0");
   general->margin = 30.0;
   pd->general = general;
   pd->axel_data = axel;
@@ -121,8 +121,8 @@ int main(void)
 
   pie(pd);
   free(general->file_name);
-  general->file_name = malloc(sizeof(char) * 17);
-  strcpy(general->file_name, "bin/doughnut.svg\0");
+  general->file_name = malloc(sizeof(char) * 25);
+  strcpy(general->file_name, "../bin/doughnut.svg\0");
   pd->doughnut_header = malloc(sizeof(char) * 6);
   strcpy(pd->doughnut_header, "Label\0");
   pd->doughnut_sub_header = malloc(sizeof(char) * 6);
@@ -134,8 +134,8 @@ int main(void)
   /* bar chart */
   struct bar_data* bd = malloc(sizeof(struct bar_data));
   free(general->file_name);
-  general->file_name = malloc(sizeof(char) * 13);
-  strcpy(general->file_name, "bin/vbar.svg\0");
+  general->file_name = malloc(sizeof(char) * 17);
+  strcpy(general->file_name, "../bin/vbar.svg\0");
   bd->general = general;
   general->margin = 100;
   bd->theme = theme;
@@ -170,7 +170,7 @@ int main(void)
   axel->vertical_lines = 1;
   axel->horizontal_lines = 0;
 
-  strcpy(general->file_name, "bin/hbar.svg\0");
+  strcpy(general->file_name, "../bin/hbar.svg\0");
   hbar(bd);
 
   //maybe care to free later
