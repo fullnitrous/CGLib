@@ -107,7 +107,7 @@ struct bar_data
 ```
 *Code snipped taken from `src/cgraphlib.h`*
 
-The following pictures are snapshots of the various graphs configured to look like they do in the main.c file.
+The following pictures are snapshots of the various graphs configured to look like they do in the main.c file. **IMPORTANT: These graphs may be malformed if the program that is rendering the svg file does not support the svg format to the full extent.**
 
 ![line chart](./bin/graph.svg)
 *line chart*
