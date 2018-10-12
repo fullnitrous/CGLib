@@ -18,10 +18,6 @@
     uint8_t stop_color_rgb[3];
     uint8_t out_color_rgb[3];
     float   percentage;
-
-    int value[2];
-    int hue[2];
-    int saturation[2];
   };
 
   struct general_data
@@ -86,6 +82,8 @@
     struct pie_slice* slices;
     struct theme_data* theme;
     int               n_slices;
+    char* doughnut_header;
+    char* doughnut_sub_header;
   };
 
   struct bar
@@ -106,5 +104,7 @@
 
   void graph(struct graph_data*   gd);
   void pie  (struct pie_data*     pd);
-  void bar  (struct bar_data*     bd);
+  void vbar  (struct bar_data*     bd);
+  void hbar  (struct bar_data* bd);
+  void doughnut(struct pie_data* pd);
 #endif

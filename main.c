@@ -32,7 +32,7 @@ int main(void)
 
   axel->axel_number_offset = 5.0;
   
-  axel->n_measure_points = 10;
+  axel->n_measure_points = 5;
 
   axel->w[0] = -25;
   axel->w[1] = 25;
@@ -116,16 +116,26 @@ int main(void)
   {
     pd->slices[i].percentage = 1.0 / pd->n_slices;
     pd->slices[i].name = malloc(6);
-    strcpy(pd->slices[i].name, "label\0");
+    strcpy(pd->slices[i].name, "Label\0");
   }
 
   pie(pd);
+  free(general->file_name);
+  general->file_name = malloc(sizeof(char) * 17);
+  strcpy(general->file_name, "bin/doughnut.svg\0");
+  pd->doughnut_header = malloc(sizeof(char) * 6);
+  strcpy(pd->doughnut_header, "Label\0");
+  pd->doughnut_sub_header = malloc(sizeof(char) * 6);
+  strcpy(pd->doughnut_sub_header, "Label\0");
+  doughnut(pd);
 
 
 
   /* bar chart */
   struct bar_data* bd = malloc(sizeof(struct bar_data));
-  strcpy(general->file_name, "bin/bar.svg\0");
+  free(general->file_name);
+  general->file_name = malloc(sizeof(char) * 13);
+  strcpy(general->file_name, "bin/vbar.svg\0");
   bd->general = general;
   general->margin = 100;
   bd->theme = theme;
@@ -133,6 +143,7 @@ int main(void)
   bd->n_bars =  6;
   bd->spacing = 10;
   axel->numbered_x = 0;
+  axel->vertical_lines = 0;
   bd->bars = malloc(sizeof(struct bar) * bd->n_bars);
 
   axel->w[0] = 0;
@@ -144,10 +155,23 @@ int main(void)
   {
     bd->bars[i].value = 50.0 - i * 25.0;
     bd->bars[i].name = malloc(6);
-    strcpy(bd->bars[i].name, "label\0");
+    strcpy(bd->bars[i].name, "Label\0");
   }
 
-  bar(bd);
+  vbar(bd);
+
+  axel->w[0] = -100;
+  axel->w[1] = 100;
+  axel->h[0] = 0;
+  axel->h[1] = 100;
+
+  axel->numbered_y = 0;
+  axel->numbered_x = 1;
+  axel->vertical_lines = 1;
+  axel->horizontal_lines = 0;
+
+  strcpy(general->file_name, "bin/hbar.svg\0");
+  hbar(bd);
 
   //maybe care to free later
 

@@ -214,3 +214,17 @@ void calculate_color(struct theme_data* td)
   }
   return;
 }
+
+void print_top_header(FILE* file, struct general_data* gd)
+{
+  fprintf(file, 
+    svg_top_header_start, 
+    gd->viewport_x + gd->margin, 
+    gd->viewport_y + gd->margin, 
+    gd->stroke_width,
+    gd->margin / 2.0,
+    gd->margin / 2.0,
+    gd->viewport_x, 
+    gd->viewport_y);
+  return;
+}

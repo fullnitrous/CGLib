@@ -1,7 +1,7 @@
 #include "cgraphlib.h"
 #include "cgraphlib-other.h"
 
-void bar(struct bar_data* bd)
+void vbar(struct bar_data* bd)
 {
   FILE* file = fopen(bd->general->file_name, "wb");
 
