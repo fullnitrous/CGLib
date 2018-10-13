@@ -153,7 +153,7 @@ int main(void)
 
   for(int i = 0; i < bd->n_bars; i++)
   {
-    bd->bars[i].value = 50.0 - i * 10;
+    bd->bars[i].value = 50.0 - i * 6;
     bd->bars[i].name = malloc(6);
     strcpy(bd->bars[i].name, "Label\0");
   }

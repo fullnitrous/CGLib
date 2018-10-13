@@ -226,3 +226,26 @@ char* sn_instant(const char* format, ...)
   ret[size] = '\0';
   return ret;
 }
+
+int group_switcher(struct group_switcher_data* gsd)
+{
+  if(gsd->cmp_1)
+  {
+    if(gsd->previous != -1)
+    {
+      fprintf(gsd->file, svg_group_stop);
+    }
+    gsd->previous = 1;
+    fprintf(gsd->file, svg_custom_group, gsd->cmp_1_out);
+  }
+  else if(gsd->cmp_2)
+  {
+    if(gsd->previous != -1)
+    {
+      fprintf(gsd->file, svg_group_stop);
+    }
+    gsd->previous = 2;
+    fprintf(gsd->file, svg_custom_group, gsd->cmp_2_out);
+  }
+  return gsd->previous;
+}
