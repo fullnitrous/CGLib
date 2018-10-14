@@ -78,7 +78,7 @@ void doughnut(struct pie_data* pd)
 
       pd->theme->percentage = (i + 1) / (store_n_slices * 1.0);
 
-      calculate_color(pd->theme);
+      get_gradient(pd->theme);
 
       fprintf(file, svg_doughnut_section,
         x_0,

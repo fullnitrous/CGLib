@@ -8,23 +8,15 @@ uint8_t getRandByte(void)
 
 void draw_axis_horizontals(FILE* file, float x_axel_y_offset, float y_axel_x_offset, struct general_data* gd, struct axel_data* ad)
 {
-  int size;
   char* ret;
   char* ret_2;
 
-  size = snprintf(NULL, 0, "stroke = \"#%02x%02x%02x\"", 
-  ad->axel_lines_rgb[0],
-  ad->axel_lines_rgb[1],
-  ad->axel_lines_rgb[2]);
-  ret = malloc(sizeof(char) * (size + 1));
-  snprintf(ret, size, "stroke = \"#%02x%02x%02x\"", 
-  ad->axel_lines_rgb[0],
-  ad->axel_lines_rgb[1],
-  ad->axel_lines_rgb[2]);
-  ret[size] = '\0';
+  ret = stringify("stroke = \"#%02x%02x%02x\"", 
+    ad->axel_lines_rgb[0],
+    ad->axel_lines_rgb[1],
+    ad->axel_lines_rgb[2]);
 
   fprintf(file, svg_custom_group, ret);
-
   free(ret);
 
   float add = gd->viewport_x / ad->n_measure_points;
@@ -72,33 +64,17 @@ void draw_axis_horizontals(FILE* file, float x_axel_y_offset, float y_axel_x_off
   
   if(ad->numbered_x)
   {
-    size = snprintf(NULL, 0, "text-anchor = \"end\" dominant-baseline=\"hanging\" font-size=\"%d\"", gd->font_size);
-    ret = malloc(sizeof(char) * (size + 1));
-    snprintf(ret, size, "text-anchor = \"end\" dominant-baseline=\"hanging\" font-size=\"%d\"", gd->font_size);
-    ret[size] = '\0';
+    ret = stringify("text-anchor = \"end\" dominant-baseline=\"hanging\" font-size=\"%d\"", gd->font_size);
 
     fprintf(file, svg_custom_group, ret);
     for(int i = 0; i < ad->n_measure_points + 1; i++)
     {
-      size = snprintf(NULL, 0, "%9.2f", a_counter);
-      ret = malloc(sizeof(char) * (size + 1));
-      snprintf(ret, size, "%9.2f", a_counter);
-      ret[size] = '\0';
+      ret = stringify("%9.2f", a_counter);
 
-      size = snprintf(NULL, 0, "transform=\"rotate(%9.6f, %9.6f, %9.6f)\"", 
+      ret_2 = stringify("transform=\"rotate(%9.6f, %9.6f, %9.6f)\"", 
       ad->x_axel_text_angle,
       gd->margin / 2.0 + counter,
       gd->margin / 2.0 + gd->viewport_y - y_axel_x_offset);
-
-
-      ret_2 = malloc(sizeof(char) * (size + 1));
-      snprintf(ret_2, size, "transform=\"rotate(%9.6f, %9.6f, %9.6f)\"",
-      ad->x_axel_text_angle,
-      gd->margin / 2.0 + counter,
-      gd->margin / 2.0 + gd->viewport_y - y_axel_x_offset);
-
-
-      ret_2[size] = '\0';
       
       fprintf(file, svg_custom_text, 
         gd->margin / 2.0 + counter,
@@ -123,18 +99,12 @@ void draw_axis_horizontals(FILE* file, float x_axel_y_offset, float y_axel_x_off
 
   if(ad->numbered_y)
   {
-    size = snprintf(NULL, 0, "text-anchor = \"end\" font-size=\"%d\"", gd->font_size);
-    ret = malloc(sizeof(char) * (size + 1));
-    snprintf(ret, size, "text-anchor = \"end\" font-size=\"%d\"", gd->font_size);
-    ret[size] = '\0';
+    ret = stringify("text-anchor = \"end\" font-size=\"%d\"", gd->font_size);
 
     fprintf(file, svg_custom_group, ret);
     for(int i = 0; i < ad->n_measure_points + 1; i++)
     {
-      size = snprintf(NULL, 0, "%9.2f", a_counter);
-      ret = malloc(sizeof(char) * (size + 1));
-      snprintf(ret, size, "%9.2f", a_counter);
-      ret[size] = '\0';
+      ret = stringify("%9.2f", a_counter);
 
       fprintf(file, svg_text, 
         gd->margin / 2.0 + x_axel_y_offset + ad->axel_number_offset * -1,
@@ -149,16 +119,10 @@ void draw_axis_horizontals(FILE* file, float x_axel_y_offset, float y_axel_x_off
     fprintf(file, svg_group_stop);
   }
 
-  size = snprintf(NULL, 0, "stroke = \"#%02x%02x%02x\"", 
-  ad->axel_rgb[0],
-  ad->axel_rgb[1],
-  ad->axel_rgb[2]);
-  ret = malloc(sizeof(char) * (size + 1));
-  snprintf(ret, size, "stroke = \"#%02x%02x%02x\"", 
-  ad->axel_rgb[0],
-  ad->axel_rgb[1],
-  ad->axel_rgb[2]);
-  ret[size] = '\0';
+  ret = stringify("stroke = \"#%02x%02x%02x\"", 
+    ad->axel_rgb[0],
+    ad->axel_rgb[1],
+    ad->axel_rgb[2]);
 
   fprintf(file, svg_custom_group, ret);
 
@@ -182,19 +146,22 @@ void draw_axis_horizontals(FILE* file, float x_axel_y_offset, float y_axel_x_off
   return;
 }
 
-void calculate_color(struct theme_data* td)
+void get_gradient(struct theme_data* td)
 {
-  int delta;
-  int delta_index;
-  int8_t flip = 1;
+  int rgb_delta;
+  int rgb_delta_index;
+  int8_t direction = 1;
 
   for(int i = 0; i < 3; i++)
   {
-    delta = td->stop_color_rgb[i] - td->start_color_rgb[i];
-    delta *= (delta < 0) ? -1 : 1;
-    flip = (td->start_color_rgb[i] > td->stop_color_rgb[i]) ? -1 : 1;
-    delta_index = delta * td->percentage;
-    td->out_color_rgb[i] = td->start_color_rgb[i] + delta_index * flip;
+    rgb_delta = td->stop_color_rgb[i] - td->start_color_rgb[i];
+    rgb_delta *= (rgb_delta < 0) ? -1 : 1;
+
+    direction = (td->start_color_rgb[i] > td->stop_color_rgb[i]) ? -1 : 1;
+
+    rgb_delta_index = rgb_delta * td->percentage;
+    
+    td->out_color_rgb[i] = td->start_color_rgb[i] + rgb_delta_index * direction;
   }
   return;
 }
@@ -213,39 +180,57 @@ void print_top_header(FILE* file, struct general_data* gd)
   return;
 }
 
-char* sn_instant(const char* format, ...)
+char* stringify(const char* format, ...)
 {
+  char* str;
+  int   len_str;
+
   va_list args;
   va_start(args, format);
-  int size = vsnprintf(NULL, 0, format, args);
+  len_str = vsnprintf(NULL, 0, format, args);
   va_end(args);
-  char* ret = malloc(sizeof(char) * (size + 1));
+  str = malloc(sizeof(char) * (len_str + 1));
   va_start(args, format);
-  vsnprintf(ret, size, format, args);
+  vsnprintf(str, len_str, format, args);
   va_end(args);
-  ret[size] = '\0';
-  return ret;
+  str[len_str] = '\0';
+  return str;
 }
 
-int group_switcher(struct group_switcher_data* gsd)
+int print_group(struct group_data* grp_dat)
 {
-  if(gsd->cmp_1)
+  if(grp_dat->cmp_1)
   {
-    if(gsd->previous != -1)
-    {
-      fprintf(gsd->file, svg_group_stop);
-    }
-    gsd->previous = 1;
-    fprintf(gsd->file, svg_custom_group, gsd->cmp_1_out);
+    (grp_dat->previous != -1) ? fprintf(grp_dat->file, svg_group_stop) : 0;
+    fprintf(grp_dat->file, svg_custom_group, grp_dat->cmp_1_out);
+    grp_dat->previous = 1;
   }
-  else if(gsd->cmp_2)
+  else if(grp_dat->cmp_2)
   {
-    if(gsd->previous != -1)
-    {
-      fprintf(gsd->file, svg_group_stop);
-    }
-    gsd->previous = 2;
-    fprintf(gsd->file, svg_custom_group, gsd->cmp_2_out);
+    (grp_dat->previous != -1) ? fprintf(grp_dat->file, svg_group_stop) : 0;
+    fprintf(grp_dat->file, svg_custom_group, grp_dat->cmp_2_out);
+    grp_dat->previous = 2;
   }
-  return gsd->previous;
+  return grp_dat->previous;
+}
+
+struct group_data* init_group_dat(FILE* file, const char* cmp_1_out, const char* cmp_2_out)
+{
+  struct group_data* grp_dat;
+  grp_dat = malloc(sizeof(struct group_data));
+  grp_dat->file = file;
+  grp_dat->previous = -1;
+  grp_dat->cmp_1_out = malloc(strlen(cmp_1_out));
+  strcpy(grp_dat->cmp_1_out, cmp_1_out);
+  grp_dat->cmp_2_out = malloc(strlen(cmp_2_out));
+  strcpy(grp_dat->cmp_2_out, cmp_2_out);
+  return grp_dat;
+}
+
+void destroy_group_dat(struct group_data* grp_dat)
+{
+  free(grp_dat->cmp_1_out);
+  free(grp_dat->cmp_2_out);
+  free(grp_dat);
+  return;
 }

@@ -30,18 +30,11 @@ void hbar(struct bar_data* bd)
 
   int yeet = 1;
 
-  ret = sn_instant("dominant-baseline=\"middle\" font-size=\"%d\"", bd->general->font_size);
+  ret = stringify("dominant-baseline=\"middle\" font-size=\"%d\"", bd->general->font_size);
   
   fprintf(file, svg_custom_group, ret);
 
-  struct group_switcher_data* gsd = malloc(sizeof(struct group_switcher_data));
-
-  gsd->file = file;
-  gsd->previous = -1;
-  gsd->cmp_1_out = malloc(strlen("text-anchor=\"end\""));
-  strcpy(gsd->cmp_1_out, "text-anchor=\"end\"");
-  gsd->cmp_2_out = malloc(strlen("\0"));
-  strcpy(gsd->cmp_2_out, "\0");
+  struct group_data* grp_dat = init_group_dat(file, "text-anchor=\"end\"", "\0");
 
   int8_t m = 1;
 
@@ -57,16 +50,16 @@ void hbar(struct bar_data* bd)
     yeet = (bar_width > 0) ? 0 : bar_width;
 
     bd->theme->percentage = (i + 1) / (bd->n_bars* 1.0);
-    calculate_color(bd->theme);
+    get_gradient(bd->theme);
 
     x = bd->general->margin / 2.0 + x_axel_y_offset + width_offset;
 
-    gsd->cmp_1 = (gsd->previous == -1 || gsd->previous == 2) && bar_width <= 0;
-    gsd->cmp_2 = (gsd->previous == -1 || gsd->previous == 1) && bar_width > 0;
+    grp_dat->cmp_1 = make_cmp_1(grp_dat, bar_width <= 0);
+    grp_dat->cmp_2 = make_cmp_2(grp_dat, bar_width > 0);
 
     bar_width *= (bar_width > 0) ? 1 : -1;
 
-    m = (group_switcher(gsd) == 1) ? -1 : 1; 
+    m = (print_group(grp_dat) == 1) ? -1 : 1; 
 
     fprintf(file, svg_box,
       bd->theme->out_color_rgb[0],
@@ -77,7 +70,7 @@ void hbar(struct bar_data* bd)
       bar_width,
       bar_height);
 
-    ret = sn_instant("%9.1f", bd->bars[i].value);
+    ret = stringify("%9.1f", bd->bars[i].value);
     middle = bd->general->margin / 2.0 + x_axel_y_offset + width_offset;
     fprintf(file, svg_text, 
       x + bd->axel_data->axel_number_offset * m + bar_width + yeet, 
@@ -89,13 +82,9 @@ void hbar(struct bar_data* bd)
 
   fprintf(file, svg_group_stop);
 
-  free(gsd->cmp_1_out);
-  free(gsd->cmp_2_out);
-  gsd->previous = -1;
-  gsd->cmp_1_out = malloc(strlen("\0"));
-  strcpy(gsd->cmp_1_out, "\0");
-  gsd->cmp_2_out = malloc(strlen("text-anchor=\"end\""));
-  strcpy(gsd->cmp_2_out, "text-anchor=\"end\"");
+  destroy_group_dat(grp_dat);
+
+  grp_dat = init_group_dat(file, "\0", "text-anchor=\"end\"");
 
   for(int i = 0; i < bd->n_bars; i++)
   {
@@ -106,12 +95,12 @@ void hbar(struct bar_data* bd)
     width_offset = (bar_width < 0) ? bar_width : 0;
     yeet = (bar_width > 0) ? 0 : bar_width;
 
-    gsd->cmp_1 = (gsd->previous == -1 || gsd->previous == 2) && bar_width <= 0;
-    gsd->cmp_2 = (gsd->previous == -1 || gsd->previous == 1) && bar_width > 0;
+    grp_dat->cmp_1 = make_cmp_1(grp_dat, bar_width <= 0);
+    grp_dat->cmp_2 = make_cmp_2(grp_dat, bar_width > 0);
 
     bar_width *= (bar_width > 0) ? 1 : -1;
 
-    m = (group_switcher(gsd) == 2) ? -1 : 1;
+    m = (print_group(grp_dat) == 2) ? -1 : 1;
 
     bar_width *= (bar_width > 0) ? 1 : -1;
 
@@ -123,6 +112,6 @@ void hbar(struct bar_data* bd)
   fprintf(file, svg_group_stop);
   fprintf(file, svg_group_stop);
   fprintf(file, svg_top_header_stop);
-  free(gsd);
+  destroy_group_dat(grp_dat);
   return;
 }

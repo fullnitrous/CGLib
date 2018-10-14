@@ -28,7 +28,7 @@
   static const char* svg_custom_group = "<g %s>";
   static const char* svg_group_stop = "</g>";
 
-  struct group_switcher_data
+  struct group_data
   {
     FILE*    file;
     uint8_t  cmp_1;
@@ -40,10 +40,16 @@
 
   uint8_t getRandByte(void);
   void draw_axis_horizontals(FILE* file, float x_axel_y_offset, float y_axel_x_offset, struct general_data* gd, struct axel_data* ad);
-  void calculate_color(struct theme_data* td);
+  void get_gradient(struct theme_data* td);
   void print_top_header(FILE* file, struct general_data* gd);
   void print_slice_pointers(FILE* file, struct pie_data* pd);
   void print_font_size_group(FILE* file, struct general_data* gd);
-  char* sn_instant(const char* format, ...);
-  int group_switcher(struct group_switcher_data* gsd);
+  char* stringify(const char* format, ...);
+  int print_group(struct group_data* grp_dat);
+
+  #define make_cmp_1(grp_dat, cmp) (grp_dat->previous == -1 || grp_dat->previous == 2) && cmp
+  #define make_cmp_2(grp_dat, cmp) (grp_dat->previous == -1 || grp_dat->previous == 1) && cmp
+
+  struct group_data* init_group_dat(FILE* file, const char* cmp_1_out, const char* cmp_2_out);
+  void destroy_group_dat(struct group_data* grp_dat);
 #endif

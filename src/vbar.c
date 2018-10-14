@@ -36,10 +36,7 @@ void vbar(struct bar_data* bd)
   int size;
   char* ret;
 
-  size = snprintf(NULL, 0, "text-anchor = \"middle\" font-size=\"%d\"", bd->general->font_size);
-  ret = malloc(sizeof(char) * (size + 1));
-  snprintf(ret, size, "text-anchor = \"middle\" font-size=\"%d\"", bd->general->font_size);
-  ret[size] = '\0';
+  ret = stringify("text-anchor = \"middle\" font-size=\"%d\"", bd->general->font_size);
   
   fprintf(file, svg_custom_group, ret);
 
@@ -57,7 +54,7 @@ void vbar(struct bar_data* bd)
 
     bd->theme->percentage = (i + 1) / (bd->n_bars* 1.0);
     
-    calculate_color(bd->theme);
+    get_gradient(bd->theme);
 
     fprintf(file, svg_box,
       bd->theme->out_color_rgb[0],
@@ -67,11 +64,8 @@ void vbar(struct bar_data* bd)
       bd->general->margin / 2.0 + bd->general->viewport_y - y_axel_x_offset - height_offset,
       bar_width,
       height);
-
-    size = snprintf(NULL, 0, "%9.1f",  bd->bars[i].value);
-    ret = malloc(sizeof(char) * (size + 1));
-    snprintf(ret, size, "%9.1f", bd->bars[i].value);
-    ret[size] = '\0';
+    
+    ret = stringify("%9.1f",  bd->bars[i].value);
 
     middle = (bd->general->margin / 2.0 + i * x_bar_jump + x_axel_y_offset + bar_width / 2);
 
@@ -87,33 +81,17 @@ void vbar(struct bar_data* bd)
 
   uint8_t s = 1;
   int8_t m = 1;
-  char* end_width = malloc(strlen(svg_group_stop));
-  strcpy(end_width, svg_group_stop);
-
-  fprintf(file, svg_custom_group, "dominant-baseline=\"hanging\""); 
+  
+  struct group_data* grp_dat = init_group_dat(file, "\0", "dominant-baseline=\"hanging\"");
 
   for(int i = 0; i < bd->n_bars; i++)
   {
     height = (bd->bars[i].value / (bd->axel_data->h[1] - bd->axel_data->h[0])) * bd->general->viewport_y;
 
-    if(s == 1 && height <= 0)
-    {
-      fprintf(file, svg_group_stop);
-      free(end_width);
-      end_width = malloc(1);
-      strcpy(end_width, "\0");
-      s = 0;
-      m = -1;
-    }
-    else if(s == 0 && height > 0.0)
-    {
-      fprintf(file, svg_custom_group, "dominant-baseline=\"hanging\""); 
-      free(end_width);
-      end_width = malloc(strlen(svg_group_stop));
-      strcpy(end_width, svg_group_stop);
-      s = 1;
-      m = 1;
-    }
+    grp_dat->cmp_1 = make_cmp_1(grp_dat, height <= 0);
+    grp_dat->cmp_2 = make_cmp_2(grp_dat, height > 0);
+
+    m = (print_group(grp_dat) == 1) ? -1 : 1; 
 
     middle = (bd->general->margin / 2.0 + i * x_bar_jump + x_axel_y_offset + bar_width / 2);
 
@@ -122,11 +100,9 @@ void vbar(struct bar_data* bd)
       bd->general->margin / 2.0 + bd->general->viewport_y - y_axel_x_offset + bd->axel_data->axel_number_offset * m,
       bd->bars[i].name);
   }
-
-  fprintf(file, end_width);
-
+  destroy_group_dat(grp_dat);
   fprintf(file, svg_group_stop);
-
+  fprintf(file, svg_group_stop);
   fprintf(file, svg_top_header_stop);
   return;
 }

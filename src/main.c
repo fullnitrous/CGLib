@@ -109,7 +109,7 @@ int main(void)
   pd->general = general;
   pd->axel_data = axel;
   pd->theme = theme;
-  pd->n_slices = 15;
+  pd->n_slices = 5;
   pd->slices = malloc(sizeof(struct pie_slice) * pd->n_slices);
 
   for(int i = 0; i < pd->n_slices; i++)

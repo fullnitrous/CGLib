@@ -30,7 +30,7 @@ void print_slice_pointers(FILE* file, struct pie_data* pd)
   char* end_width = malloc(strlen(svg_group_stop));
   strcpy(end_width, svg_group_stop);
 
-  ret = sn_instant("stroke=\"#%02x%02x%02x\"", 
+  ret = stringify("stroke=\"#%02x%02x%02x\"", 
     pd->axel_data->axel_rgb[0],
     pd->axel_data->axel_rgb[1],
     pd->axel_data->axel_rgb[2]);
@@ -96,7 +96,7 @@ void print_slice_pointers(FILE* file, struct pie_data* pd)
   end_width = malloc(strlen(svg_group_stop));
   strcpy(end_width, svg_group_stop);
 
-  ret = sn_instant("fill=\"#%02x%02x%02x\" dominant-baseline=\"hanging\"", 
+  ret = stringify("fill=\"#%02x%02x%02x\" dominant-baseline=\"hanging\"", 
     pd->axel_data->axel_rgb[0],
     pd->axel_data->axel_rgb[1],
     pd->axel_data->axel_rgb[2]);
@@ -111,7 +111,7 @@ void print_slice_pointers(FILE* file, struct pie_data* pd)
     y_pointer_start = sin(radians) * radius + origin[1];
     current_pointer_len = (origin[0] < x_pointer_start) ? pointer_len : -pointer_len;
 
-    ret = sn_instant("%9.1f%%", pd->slices[i].percentage * 100);
+    ret = stringify("%9.1f%%", pd->slices[i].percentage * 100);
     
     if(s == 1 && origin[0] < x_pointer_start)
     {
@@ -209,7 +209,7 @@ void pie(struct pie_data* pd)
 
       pd->theme->percentage = (i+1)/(store_n_slices*1.0);
 
-      calculate_color(pd->theme);
+      get_gradient(pd->theme);
 
       fprintf(file, svg_slice,
         start[0],
