@@ -57,6 +57,7 @@ void print_slice_pointers(FILE* file, struct pie_data* pd)
 
   sum_counter = 0.0;
 
+  struct group_data* grp_dat = init_group_dat(file, "text-anchor=\"end\"", "\0");  
   for(int i = 0; i < pd->n_slices; i++)
   {
     radians = 2   * (pd->slices[i].percentage / 2 + sum_counter) * PI;
@@ -65,29 +66,16 @@ void print_slice_pointers(FILE* file, struct pie_data* pd)
     y_pointer_start = sin(radians) * radius + origin[1];
     current_pointer_len = (origin[0] < x_pointer_start) ? pointer_len : -pointer_len;
 
-    if(s == 1 && origin[0] < x_pointer_start)
-    {
-      fprintf(file, svg_custom_group, "text-anchor = \"end\""); 
-      free(end_width);
-      end_width = malloc(strlen(svg_group_stop));
-      strcpy(end_width, svg_group_stop);
-      s = 0;
-    }
-    else if(s == 0 && origin[0] > x_pointer_start)
-    {
-      fprintf(file, svg_group_stop);
-      free(end_width);
-      end_width = malloc(1);
-      strcpy(end_width, "\0");
-      s = 1;
-    }
+    grp_dat->cmp_1 = make_cmp_1(grp_dat, origin[0] < x_pointer_start);
+    grp_dat->cmp_2 = make_cmp_2(grp_dat, origin[0] > x_pointer_start);
+    print_group(grp_dat);
 
     fprintf(file, svg_text,
       x_pointer_start + current_pointer_len,
       y_pointer_start - pd->axel_data->axel_number_offset,
       pd->slices[i].name);
   }
-
+  destroy_group_dat(grp_dat);
   fprintf(file, end_width);
 
   sum_counter = 0.0;
@@ -103,6 +91,7 @@ void print_slice_pointers(FILE* file, struct pie_data* pd)
   fprintf(file, svg_custom_group, ret);
   free(ret);
   
+  grp_dat = init_group_dat(file, "text-anchor=\"end\"", "\0"); 
   for(int i = 0; i < pd->n_slices; i++)
   {
     radians = 2   * (pd->slices[i].percentage / 2 + sum_counter) * PI;
@@ -113,22 +102,9 @@ void print_slice_pointers(FILE* file, struct pie_data* pd)
 
     ret = stringify("%9.1f%%", pd->slices[i].percentage * 100);
     
-    if(s == 1 && origin[0] < x_pointer_start)
-    {
-      fprintf(file, svg_custom_group, "text-anchor = \"end\""); 
-      free(end_width);
-      end_width = malloc(strlen(svg_group_stop));
-      strcpy(end_width, svg_group_stop);
-      s = 0;
-    }
-    else if(s == 0 && origin[0] > x_pointer_start)
-    {
-      fprintf(file, svg_group_stop);
-      free(end_width);
-      end_width = malloc(1);
-      strcpy(end_width, "\0");
-      s = 1;
-    }
+    grp_dat->cmp_1 = make_cmp_1(grp_dat, origin[0] < x_pointer_start);
+    grp_dat->cmp_2 = make_cmp_2(grp_dat, origin[0] > x_pointer_start);
+    print_group(grp_dat);
 
     fprintf(file, svg_text,   
       x_pointer_start + current_pointer_len, 
@@ -136,6 +112,7 @@ void print_slice_pointers(FILE* file, struct pie_data* pd)
 
     free(ret);
   }
+  destroy_group_dat(grp_dat);
   fprintf(file, svg_group_stop);
   fprintf(file, end_width);
 }
@@ -156,7 +133,6 @@ void pie(struct pie_data* pd)
   FILE* file;
   uint8_t large_arc_flag;
   float percentage_overlap_multiplier, 
-        sum, 
         radius, 
         origin[2], 
         radians[2], 
@@ -171,34 +147,24 @@ void pie(struct pie_data* pd)
   origin[1] = pd->general->viewport_y / 2.0 + pd->general->margin / 2.0;
   //making this number 2 above or very near 2 can cause visual bugs
   percentage_overlap_multiplier = 1.9;
-  sum = 0.0;
 
+  float sum = 0.0;
 
   for(int i = 0; i < pd->n_slices; i++)
   {
     sum += pd->slices[i].percentage;
   }
+
   print_font_size_group(file, pd->general);
-  if(roundf(sum * 100) / 100 == 1.0 && pd->n_slices >= 2)
+  valid_pie_data(pd, roundf(sum * 100) / 100)
   {
-    uint8_t print_first;
-    float sum_counter,
-          store_slice_0;
-    int   i,
-          store_n_slices;
+    float sum_counter;
 
     fprintf(file, svg_limiter_box);
-
-    i = 0;
-    store_slice_0 = pd->slices[0].percentage;
-    store_n_slices = pd->n_slices;
-    print_first = 1;
-
-    LOL:
-    for(i; i < pd->n_slices; i++)
+    for(int i = 0; i < pd->n_slices; i++)
     {
       radians[0] = 2*sum_counter*PI;
-      radians[1] = 2*(pd->slices[i].percentage*percentage_overlap_multiplier+sum_counter)*PI;
+      radians[1] = 2*(pd->slices[i].percentage/*percentage_overlap_multiplier*/+sum_counter)*PI;
       sum_counter += pd->slices[i].percentage;
       large_arc_flag = (pd->slices[i].percentage > 0.5) ? 1 : 0;
 
@@ -207,7 +173,7 @@ void pie(struct pie_data* pd)
       stop[0] = cos(radians[1])*radius+origin[0];
       stop[1] = sin(radians[1])*radius+origin[1];
 
-      pd->theme->percentage = (i+1)/(store_n_slices*1.0);
+      pd->theme->percentage = (i+1)/(pd->n_slices*1.0);
 
       get_gradient(pd->theme);
 
@@ -225,27 +191,8 @@ void pie(struct pie_data* pd)
         pd->theme->out_color_rgb[1],
         pd->theme->out_color_rgb[2]);
     }
-
-    if(print_first)
-    {
-      print_first = 0;
-      i = 0;
-      pd->n_slices = 1;
-      sum_counter = 0.0;
-      percentage_overlap_multiplier = 1.0;
-      goto LOL;
-    }
-    else
-    {
-      pd->slices[0].percentage = store_slice_0;
-      pd->n_slices = store_n_slices;
-    }
     print_slice_pointers(file, pd);
     fprintf(file, svg_group_stop);
-  }
-  else
-  {
-    printf("error slices do not add up to 100%%, but %9.6f%%\n", sum);
   }
   fprintf(file, svg_group_stop);
   fprintf(file, svg_top_header_stop);

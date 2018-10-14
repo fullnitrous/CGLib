@@ -109,23 +109,21 @@ int main(void)
   pd->general = general;
   pd->axel_data = axel;
   pd->theme = theme;
-  pd->n_slices = 5;
+  pd->n_slices = 1;
   pd->slices = malloc(sizeof(struct pie_slice) * pd->n_slices);
 
-  for(int i = 0; i < pd->n_slices; i++)
-  {
-    pd->slices[i].percentage = 1.0 / pd->n_slices;
-    pd->slices[i].name = malloc(6);
-    strcpy(pd->slices[i].name, "Label\0");
-  }
+  int i = 0;
+  pd->slices[i].percentage = 0.8;
+  pd->slices[i].name = malloc(6);
+  strcpy(pd->slices[i].name, "Label\0");
 
   pie(pd);
   free(general->file_name);
   general->file_name = malloc(sizeof(char) * 25);
   strcpy(general->file_name, "../bin/doughnut.svg\0");
-  pd->doughnut_header = malloc(sizeof(char) * 6);
+  pd->doughnut_header = malloc(sizeof(char) * 15);
   strcpy(pd->doughnut_header, "Label\0");
-  pd->doughnut_sub_header = malloc(sizeof(char) * 6);
+  pd->doughnut_sub_header = malloc(sizeof(char) * 15);
   strcpy(pd->doughnut_sub_header, "Label\0");
   doughnut(pd);
 
@@ -141,7 +139,7 @@ int main(void)
   bd->theme = theme;
   bd->axel_data = axel;
   bd->n_bars =  15;
-  bd->spacing = 10;
+  bd->spacing = 5;
   axel->numbered_x = 0;
   axel->vertical_lines = 0;
   bd->bars = malloc(sizeof(struct bar) * bd->n_bars);

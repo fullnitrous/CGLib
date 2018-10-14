@@ -49,7 +49,7 @@ void doughnut(struct pie_data* pd)
 
   uint8_t calculated_rgb[3];
 
-  if(roundf(sum * 100) / 100 == 1.0 && pd->n_slices >= 3)
+  valid_pie_data(pd, roundf(sum * 100) / 100)
   {
     sum_counter = 0.0;
     fprintf(file, svg_limiter_box);
