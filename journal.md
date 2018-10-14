@@ -17,3 +17,4 @@
 - [ ] stacked bar charts
 - [ ] funnel charts
 - [ ] pyramid charts
+- [ ] box plots
