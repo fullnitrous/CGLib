@@ -63,7 +63,7 @@ void doughnut(struct pie_data* pd)
     {
       large_arc_flag  = (pd->slices[i].percentage > 0.5) ? 1 : 0;
       radians_1 = 2 * sum_counter * PI;
-      radians_2 = 2 * (pd->slices[i].percentage * percentage_overlap_multiplier + sum_counter) * PI;
+      radians_2 = 2 * (pd->slices[i].percentage /* percentage_overlap_multiplier*/ + sum_counter) * PI;
 
       sum_counter   += pd->slices[i].percentage;
 

@@ -50,7 +50,7 @@
   {
     float x;
     float y;
-  } point;
+  };
 
   struct line
   {
@@ -64,7 +64,7 @@
   struct graph_data
   {
     struct line*   lines;
-    int     n_lines;
+    int    n_lines;
     struct general_data* general;
     struct axel_data* axel_data;
   };

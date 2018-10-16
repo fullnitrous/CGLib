@@ -105,15 +105,30 @@ int main(void)
   free(general->file_name);
   general->file_name = malloc(sizeof(char) * 18);
   strcpy(general->file_name, "../bin/pie.svg\0");
-  general->margin = 30.0;
+  general->margin = 100.0;
   pd->general = general;
   pd->axel_data = axel;
   pd->theme = theme;
-  pd->n_slices = 1;
+  pd->n_slices = 4;
   pd->slices = malloc(sizeof(struct pie_slice) * pd->n_slices);
 
   int i = 0;
-  pd->slices[i].percentage = 0.8;
+  pd->slices[i].percentage = 0.10;
+  pd->slices[i].name = malloc(6);
+  strcpy(pd->slices[i].name, "Label\0");
+
+  i = 1;
+  pd->slices[i].percentage = 0.10;
+  pd->slices[i].name = malloc(6);
+  strcpy(pd->slices[i].name, "Label\0");
+
+  i = 2;
+  pd->slices[i].percentage = 0.35;
+  pd->slices[i].name = malloc(6);
+  strcpy(pd->slices[i].name, "Label\0");
+
+  i = 3;
+  pd->slices[i].percentage = 0.25;
   pd->slices[i].name = malloc(6);
   strcpy(pd->slices[i].name, "Label\0");
 

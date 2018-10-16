@@ -135,9 +135,13 @@ void pie(struct pie_data* pd)
   float percentage_overlap_multiplier, 
         radius, 
         origin[2], 
-        radians[2], 
+        radians[3], 
         start[2], 
-        stop[2];
+        stop[2],
+        origin_circle[2],
+        origin_radius;
+
+  origin_radius = 50.0;
 
 
   file = fopen(pd->general->file_name, "wb");
@@ -148,9 +152,11 @@ void pie(struct pie_data* pd)
   //making this number 2 above or very near 2 can cause visual bugs
   percentage_overlap_multiplier = 1.9;
 
+  fprintf(file, svg_circle, origin[0], origin[1], origin_radius);
+
   float sum = 0.0;
 
-  for(int i = 0; i < pd->n_slices; i++)
+  loop(pd->n_slices)
   {
     sum += pd->slices[i].percentage;
   }
@@ -161,19 +167,22 @@ void pie(struct pie_data* pd)
     float sum_counter;
 
     fprintf(file, svg_limiter_box);
-    for(int i = 0; i < pd->n_slices; i++)
+    loop(pd->n_slices)
     {
-      radians[0] = 2*sum_counter*PI;
-      radians[1] = 2*(pd->slices[i].percentage/*percentage_overlap_multiplier*/+sum_counter)*PI;
-      sum_counter += pd->slices[i].percentage;
+      radians[0] = 2 * sum_counter*PI;
+      radians[1] = 2 * (pd->slices[i].percentage/*percentage_overlap_multiplier*/+sum_counter)*PI;
+      radians[2] = 2 * (pd->slices[i].percentage / 2.0 + sum_counter) * PI;
+      sum_counter   += pd->slices[i].percentage;
       large_arc_flag = (pd->slices[i].percentage > 0.5) ? 1 : 0;
 
-      start[0] = cos(radians[0])*radius+origin[0];
-      start[1] = sin(radians[0])*radius+origin[1];
-      stop[0] = cos(radians[1])*radius+origin[0];
-      stop[1] = sin(radians[1])*radius+origin[1];
+      origin_circle[0] = cos(radians[2]) * origin_radius + origin[0];
+      origin_circle[1] = sin(radians[2]) * origin_radius + origin[1];
+      start[0] = cos(radians[0]) * radius + origin_circle[0];
+      start[1] = sin(radians[0]) * radius + origin_circle[1];
+      stop[0] =  cos(radians[1]) * radius + origin_circle[0];
+      stop[1] =  sin(radians[1]) * radius + origin_circle[1];
 
-      pd->theme->percentage = (i+1)/(pd->n_slices*1.0);
+      pd->theme->percentage = (i + 1) / (pd->n_slices*1.0);
 
       get_gradient(pd->theme);
 
@@ -185,8 +194,8 @@ void pie(struct pie_data* pd)
         large_arc_flag,
         stop[0],
         stop[1],
-        origin[0],
-        origin[1],
+        origin_circle[0],
+        origin_circle[1],
         pd->theme->out_color_rgb[0],
         pd->theme->out_color_rgb[1],
         pd->theme->out_color_rgb[2]);

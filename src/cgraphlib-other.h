@@ -7,6 +7,7 @@
   #define make_cmp_1(grp_dat, cmp) (grp_dat->previous == -1 || grp_dat->previous == 2) && cmp
   #define make_cmp_2(grp_dat, cmp) (grp_dat->previous == -1 || grp_dat->previous == 1) && cmp
   #define valid_pie_data(pd, sum) if((pd->n_slices > 1 || (pd->n_slices == 1 && pd->slices[0].percentage < 1.0)) && sum <= 1.0)
+  #define loop(x) for(int i = 0; i < x; i++)
   
   #define svg_top_header_start "<?xml version=\"1.0\" encoding=\"UTF-8\" ?><!--THIS DOCUMENT WAS GENERATED WITH CGLIB CREATED BY FULLNITROUS RIGHTS RESERVED TO VOIDZEHN HTTPS://MDPP.XYZ HTTPS://VOIDZEHN.COM HTTPS://CGLIB.XYZ HTTPS://FULLNITROUS.COM--><svg xmlns=\"http://www.w3.org/2000/svg\" style =\"font-family: sans-serif;\" version=\"1.1\" viewBox=\"0 0 %9.6f %9.6f\" stroke-width=\"%d\"><defs><clipPath id=\"fuckyou\"><rect x=\"%9.6f\" y=\"%9.6f\" width=\"%9.6f\" height=\"%9.6f\"/></clipPath></defs>"
 
