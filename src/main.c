@@ -1,12 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "cgraphlib.h"
+#include "cglib.h"
 
 int main(void)
 {
-  //add color to axels
-
   struct general_data* general = malloc(sizeof(struct general_data));
   general->stroke_width = 1;
   general->margin = 100;
@@ -55,8 +53,8 @@ int main(void)
   struct graph_data* gp = malloc(sizeof(struct graph_data));
   gp->general = general;
   gp->axel_data = axel;
-  general->file_name = malloc(sizeof(char) * 18);
-  strcpy(general->file_name, "../bin/graph.svg\0");
+  general->file_name = malloc(sizeof(char) * 30);
+  strcpy(general->file_name, "../svg-out/graph.svg\0");
 
   gp->n_lines = 2;
   gp->lines = malloc(sizeof(struct line) * 2);
@@ -103,9 +101,9 @@ int main(void)
   /* pie chart */
   struct pie_data* pd = malloc(sizeof(struct pie_data));
   free(general->file_name);
-  general->file_name = malloc(sizeof(char) * 18);
-  strcpy(general->file_name, "../bin/pie.svg\0");
-  general->margin = 100.0;
+  general->file_name = malloc(sizeof(char) * 30);
+  strcpy(general->file_name, "../svg-out/pie.svg\0");
+  general->margin = 40.0;
   pd->general = general;
   pd->axel_data = axel;
   pd->theme = theme;
@@ -113,32 +111,32 @@ int main(void)
   pd->slices = malloc(sizeof(struct pie_slice) * pd->n_slices);
 
   int i = 0;
-  pd->slices[i].percentage = 0.10;
+  pd->slices[i].percentage = 0.1;
   pd->slices[i].name = malloc(6);
   strcpy(pd->slices[i].name, "Label\0");
 
   i = 1;
-  pd->slices[i].percentage = 0.10;
+  pd->slices[i].percentage = 0.1;
   pd->slices[i].name = malloc(6);
   strcpy(pd->slices[i].name, "Label\0");
 
   i = 2;
-  pd->slices[i].percentage = 0.35;
+  pd->slices[i].percentage = 0.5;
   pd->slices[i].name = malloc(6);
   strcpy(pd->slices[i].name, "Label\0");
 
   i = 3;
-  pd->slices[i].percentage = 0.25;
+  pd->slices[i].percentage = 0.3;
   pd->slices[i].name = malloc(6);
   strcpy(pd->slices[i].name, "Label\0");
 
   pie(pd);
   free(general->file_name);
-  general->file_name = malloc(sizeof(char) * 25);
-  strcpy(general->file_name, "../bin/doughnut.svg\0");
+  general->file_name = malloc(sizeof(char) * 30);
+  strcpy(general->file_name, "../svg-out/doughnut.svg\0");
   pd->doughnut_header = malloc(sizeof(char) * 15);
   strcpy(pd->doughnut_header, "Label\0");
-  pd->doughnut_sub_header = malloc(sizeof(char) * 15);
+  pd->doughnut_sub_header = malloc(sizeof(char) * 30);
   strcpy(pd->doughnut_sub_header, "Label\0");
   doughnut(pd);
 
@@ -147,8 +145,8 @@ int main(void)
   /* bar chart */
   struct bar_data* bd = malloc(sizeof(struct bar_data));
   free(general->file_name);
-  general->file_name = malloc(sizeof(char) * 17);
-  strcpy(general->file_name, "../bin/vbar.svg\0");
+  general->file_name = malloc(sizeof(char) * 30);
+  strcpy(general->file_name, "../svg-out/vbar.svg\0");
   bd->general = general;
   general->margin = 100;
   bd->theme = theme;
@@ -183,7 +181,7 @@ int main(void)
   axel->vertical_lines = 1;
   axel->horizontal_lines = 0;
 
-  strcpy(general->file_name, "../bin/hbar.svg\0");
+  strcpy(general->file_name, "../svg-out/hbar.svg\0");
   hbar(bd);
 
   //maybe care to free later

@@ -43,7 +43,7 @@
     uint8_t y_axel_text_right;
     uint8_t numbered_x;
     uint8_t numbered_y;
-    float axel_number_offset;
+    float   axel_number_offset;
   };
 
   struct point
@@ -55,18 +55,18 @@
   struct line
   {
     struct point*  points;
-    int     graph_type;
-    int     n_points;
-    char*   name;
-    uint8_t stroke_rgb[3];
+    int            graph_type;
+    int            n_points;
+    char*          name;
+    uint8_t        stroke_rgb[3];
   };
 
   struct graph_data
   {
-    struct line*   lines;
-    int    n_lines;
+    struct line*         lines;
+    int                  n_lines;
     struct general_data* general;
-    struct axel_data* axel_data;
+    struct axel_data*    axel_data;
   };
 
   struct pie_slice
@@ -77,13 +77,13 @@
   
   struct pie_data
   {
-    struct axel_data* axel_data;
+    struct axel_data*    axel_data;
     struct general_data* general;
-    struct pie_slice* slices;
-    struct theme_data* theme;
-    int               n_slices;
-    char* doughnut_header;
-    char* doughnut_sub_header;
+    struct pie_slice*    slices;
+    struct theme_data*   theme;
+    int                  n_slices;
+    char*                doughnut_header;
+    char*                doughnut_sub_header;
   };
 
   struct bar
@@ -95,16 +95,16 @@
   struct bar_data
   {
     struct general_data* general;
-    struct theme_data* theme;
-    struct axel_data* axel_data;
-    struct bar*  bars;
-    int   n_bars;
-    float spacing;
+    struct theme_data*   theme;
+    struct axel_data*    axel_data;
+    struct bar*          bars;
+    int                  n_bars;
+    float                spacing;
   };
 
-  void graph(struct graph_data*   gd);
-  void pie  (struct pie_data*     pd);
-  void vbar  (struct bar_data*     bd);
-  void hbar  (struct bar_data* bd);
-  void doughnut(struct pie_data* pd);
+  void graph   (struct graph_data* gd);
+  void pie     (struct pie_data*   pd);
+  void vbar    (struct bar_data*   bd);
+  void hbar    (struct bar_data*   bd);
+  void doughnut(struct pie_data*   pd);
 #endif

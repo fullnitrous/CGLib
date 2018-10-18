@@ -1,1 +1,1 @@
-"../bin/test.exe"
+"../bin/demo.exe"

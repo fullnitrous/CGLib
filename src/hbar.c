@@ -1,5 +1,5 @@
-#include "cgraphlib.h"
-#include "cgraphlib-other.h"
+#include "cglib.h"
+#include "cglib-other.h"
 
 void hbar(struct bar_data* bd)
 {
