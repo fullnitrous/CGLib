@@ -14,6 +14,8 @@
 
   struct theme_data
   {
+    //0 = gradient, 1 = random hue, 2 = random, 3 = lightness seperated gradient
+    uint8_t theme_type;
     uint8_t start_color_rgb[3];
     uint8_t stop_color_rgb[3];
     uint8_t out_color_rgb[3];

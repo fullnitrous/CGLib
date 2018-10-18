@@ -1,11 +1,6 @@
 #include "cglib.h"
 #include "cglib-other.h"
 
-uint8_t getRandByte(void)
-{
-  return rand();
-}
-
 void draw_axis_horizontals(FILE* file, float x_axel_y_offset, float y_axel_x_offset, struct general_data* gd, struct axel_data* ad)
 {
   char* ret;

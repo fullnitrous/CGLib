@@ -109,17 +109,17 @@ struct bar_data
 
 The following pictures are snapshots of the various graphs configured to look like they do in the main.c file. **IMPORTANT: These graphs may be malformed if the program that is rendering the svg file does not support the svg format to the full extent.**
 
-![line chart](./bin/graph.svg)
+![line chart](./svg-out/graph.svg)
 *line chart*
 
-![pie chart](./bin/pie.svg)
+![pie chart](./svg-out/pie.svg)
 *pie chart*
 
-![doughnut chart](./bin/doughnut.svg)
+![doughnut chart](./svg-out/doughnut.svg)
 *doughnut chart*
 
-![vertical bar chart](./bin/vbar.svg)
+![vertical bar chart](./svg-out/vbar.svg)
 *vertical bar chart*
 
-![horizontal bar chart](./bin/hbar.svg)
+![horizontal bar chart](./svg-out/hbar.svg)
 *horizontal bar chart*
