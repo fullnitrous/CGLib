@@ -72,6 +72,7 @@ void hbar(struct bar_data* bd)
   fprintf(file, svg_group_stop);
   fprintf(file, svg_group_stop);
   fprintf(file, svg_top_header_stop);
+  fclose(file);
   destroy_group_dat(grp_dat);
   return;
 }

@@ -71,9 +71,9 @@ void graph(struct graph_data* gd)
       fprintf(file, format, x, y);
     }
     (gd->lines[i].graph_type == 0) ? fprintf(file, svg_p_line_stop) : fprintf(file, svg_points_group_stop);
+    free(format);
   }
   fprintf(file, svg_group_stop);
-  free(format);
   fprintf(file, svg_top_header_stop);
   fclose(file);
   return;

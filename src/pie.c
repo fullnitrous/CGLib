@@ -22,13 +22,10 @@ void print_slice_pointers(FILE* file, struct pie_data* pd)
   float origin[2];
   origin[0] = pd->general->viewport_x / 2.0 + pd->general->margin / 2.0;
   origin[1] = pd->general->viewport_y / 2.0 + pd->general->margin / 2.0;
-  
-  fprintf(file, svg_custom_group, "stroke=\"black\"");
+
   sum_counter = 0.0;
 
   uint8_t s = 1;
-  char* end_width = malloc(strlen(svg_group_stop));
-  strcpy(end_width, svg_group_stop);
 
   ret = stringify("stroke=\"#%02x%02x%02x\"", 
     pd->axel_data->axel_rgb[0],
@@ -53,7 +50,6 @@ void print_slice_pointers(FILE* file, struct pie_data* pd)
       y_pointer_start);
   }
   fprintf(file, svg_group_stop);
-  fprintf(file, svg_group_stop);
 
   sum_counter = 0.0;
 
@@ -75,14 +71,12 @@ void print_slice_pointers(FILE* file, struct pie_data* pd)
       y_pointer_start - pd->axel_data->axel_number_offset,
       pd->slices[i].name);
   }
+  fprintf(file, svg_group_stop);
   destroy_group_dat(grp_dat);
-  fprintf(file, end_width);
 
   sum_counter = 0.0;
 
   s = 1;
-  end_width = malloc(strlen(svg_group_stop));
-  strcpy(end_width, svg_group_stop);
 
   ret = stringify("fill=\"#%02x%02x%02x\" dominant-baseline=\"hanging\"", 
     pd->axel_data->axel_rgb[0],
@@ -114,15 +108,12 @@ void print_slice_pointers(FILE* file, struct pie_data* pd)
   }
   destroy_group_dat(grp_dat);
   fprintf(file, svg_group_stop);
-  fprintf(file, end_width);
+  fprintf(file, svg_group_stop);
 }
 
 void print_font_size_group(FILE* file, struct general_data* gd)
 {
-  int size = snprintf(NULL, 0, "font-size=\"%d\"", gd->font_size);
-  char* ret = malloc(sizeof(char) * (size + 1));
-  snprintf(ret, size, "font-size=\"%d\"", gd->font_size);
-  ret[size] = '\0';
+  char* ret = stringify("font-size=\"%d\"", gd->font_size);
   fprintf(file, svg_custom_group, ret);
   free(ret);
   return;

@@ -187,6 +187,13 @@ int main(void)
   free(gp->lines[1].points);
   free(gp->lines);
   free(gp);
+  free(pd->doughnut_header);
+  free(pd->doughnut_sub_header);
+  for(int i = 0; i < pd->n_slices; i++)
+  {
+    free(pd->slices[i].name);
+  }
+  free(pd->slices);
   free(pd);
   for(int i = 0; i < bd->n_bars; i++)
   {

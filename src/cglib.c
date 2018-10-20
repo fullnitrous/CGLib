@@ -62,6 +62,7 @@ void draw_axis_horizontals(FILE* file, float x_axel_y_offset, float y_axel_x_off
     ret = stringify("text-anchor = \"end\" dominant-baseline=\"hanging\" font-size=\"%d\"", gd->font_size);
 
     fprintf(file, svg_custom_group, ret);
+    free(ret);
     for(int i = 0; i < ad->n_measure_points + 1; i++)
     {
       ret = stringify("%9.2f", a_counter);
@@ -97,6 +98,7 @@ void draw_axis_horizontals(FILE* file, float x_axel_y_offset, float y_axel_x_off
     ret = stringify("text-anchor = \"end\" font-size=\"%d\"", gd->font_size);
 
     fprintf(file, svg_custom_group, ret);
+    free(ret);
     for(int i = 0; i < ad->n_measure_points + 1; i++)
     {
       ret = stringify("%9.2f", a_counter);
@@ -166,7 +168,7 @@ char* stringify(const char* format, ...)
   va_end(args);
   str = malloc(sizeof(char) * (len_str + 1));
   va_start(args, format);
-  vsnprintf(str, len_str, format, args);
+  vsnprintf(str, len_str + 1, format, args);
   va_end(args);
   str[len_str] = '\0';
   return str;

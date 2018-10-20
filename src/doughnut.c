@@ -86,6 +86,7 @@ void doughnut(struct pie_data* pd)
       pd->doughnut_header);
     ret = stringify("dominant-baseline=\"hanging\" font-size=\"%d\"", pd->d_h2_font_size);
     fprintf(file, svg_custom_group, ret);
+    free(ret);
     fprintf(file, svg_text,
       origin[0],
       origin[1] + pd->axel_data->axel_number_offset,
