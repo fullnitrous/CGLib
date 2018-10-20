@@ -1,9 +1,9 @@
 # Do now
 
-- [ ] color scheme on pie and doughnut charts
-- [ ] pie and doughnut chart low slice and percentage counts
-- [ ] implement the spesific functions and remove repeating code
-- [ ] remove remaining bugs & glitches
+- [x] color scheme on pie and doughnut charts
+- [x] pie and doughnut chart low slice and percentage counts
+- [x] implement the spesific functions and remove repeating code
+- [x] remove remaining bugs & glitches
 - [ ] publish release 0.1
 
 # Do in the future
