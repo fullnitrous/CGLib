@@ -146,7 +146,7 @@ void print_slice(FILE* file, struct pie_data* pd, float* origin, float* sum_coun
 
   pd->theme->percentage = (i + 1) / (pd->n_slices*1.0);
 
-  get_gradient(pd->theme);
+  pd->theme->color_function(pd->theme);
 
   fprintf(file, svg_slice,
     start[0],
@@ -158,9 +158,9 @@ void print_slice(FILE* file, struct pie_data* pd, float* origin, float* sum_coun
     stop[1],
     origin[0],
     origin[1],
-    pd->theme->out_color_rgb[0],
-    pd->theme->out_color_rgb[1],
-    pd->theme->out_color_rgb[2]);
+    pd->theme->out.r,
+    pd->theme->out.g,
+    pd->theme->out.b);
   return;
 }
 
@@ -188,6 +188,8 @@ void pie(struct pie_data* pd)
   fprintf(file, svg_circle, origin[0], origin[1], origin_radius);
 
   float sum = 0.0;
+
+  select_color_function(pd->theme);
 
   loop(pd->n_slices)
   {

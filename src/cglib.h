@@ -12,14 +12,32 @@
 
   #define PI 3.14159265
 
+  struct rgb
+  {
+    uint8_t r;
+    uint8_t g;
+    uint8_t b;
+  };
+
+  struct hsl
+  {
+    int h;
+    float s;
+    float l;
+  };
+
   struct theme_data
   {
     //0 = gradient, 1 = random hue, 2 = random, 3 = lightness seperated gradient
     uint8_t theme_type;
-    uint8_t start_color_rgb[3];
-    uint8_t stop_color_rgb[3];
-    uint8_t out_color_rgb[3];
-    float   percentage;
+
+    struct rgb start;
+    struct rgb stop;
+    struct rgb out;
+    float  percentage;
+    float  lightness_mod_percentage;
+
+    void (*color_function)(struct theme_data* td);
   };
 
   struct general_data
@@ -85,7 +103,9 @@
     struct theme_data*   theme;
     int                  n_slices;
     char*                doughnut_header;
+    int                  d_h1_font_size;
     char*                doughnut_sub_header;
+    int                  d_h2_font_size;
   };
 
   struct bar

@@ -5,6 +5,7 @@
 
 int main(void)
 {
+  srand(time(NULL));
   struct general_data* general = malloc(sizeof(struct general_data));
   general->stroke_width = 1;
   general->margin = 100;
@@ -38,13 +39,17 @@ int main(void)
   axel->h[1] = 200;
 
   struct theme_data* theme = malloc(sizeof(struct theme_data));
-  theme->stop_color_rgb[0] = 65;
-  theme->stop_color_rgb[1] = 130;
-  theme->stop_color_rgb[2] = 234;
+  theme->stop.r = 65;
+  theme->stop.g = 130;
+  theme->stop.b = 234;
 
-  theme->start_color_rgb[0] = 234;
-  theme->start_color_rgb[1] = 99;
-  theme->start_color_rgb[2] = 175;
+  theme->start.r = 234;
+  theme->start.g = 99;
+  theme->start.b = 175;
+
+  theme->theme_type = 0;
+  
+  theme->lightness_mod_percentage = 0.6;
 
 
 
@@ -107,28 +112,18 @@ int main(void)
   pd->general = general;
   pd->axel_data = axel;
   pd->theme = theme;
-  pd->n_slices = 4;
+  pd->n_slices = 6;
   pd->slices = malloc(sizeof(struct pie_slice) * pd->n_slices);
 
-  int i = 0;
-  pd->slices[i].percentage = 0.1;
-  pd->slices[i].name = malloc(6);
-  strcpy(pd->slices[i].name, "Label\0");
+  pd->d_h1_font_size = 50;
+  pd->d_h2_font_size = 20;
 
-  i = 1;
-  pd->slices[i].percentage = 0.1;
-  pd->slices[i].name = malloc(6);
-  strcpy(pd->slices[i].name, "Label\0");
-
-  i = 2;
-  pd->slices[i].percentage = 0.5;
-  pd->slices[i].name = malloc(6);
-  strcpy(pd->slices[i].name, "Label\0");
-
-  i = 3;
-  pd->slices[i].percentage = 0.3;
-  pd->slices[i].name = malloc(6);
-  strcpy(pd->slices[i].name, "Label\0");
+  for(int i = 0; i < pd->n_slices; i++)
+  {
+    pd->slices[i].percentage = 1.0 / pd->n_slices;
+    pd->slices[i].name = malloc(6);
+    strcpy(pd->slices[i].name, "Label\0");
+  }
 
   pie(pd);
   free(general->file_name);
@@ -184,7 +179,21 @@ int main(void)
   strcpy(general->file_name, "../svg-out/hbar.svg\0");
   hbar(bd);
 
-  //maybe care to free later
+  free(general->file_name);
+  free(general);
+  free(axel);
+  free(theme);
+  free(gp->lines[0].points);
+  free(gp->lines[1].points);
+  free(gp->lines);
+  free(gp);
+  free(pd);
+  for(int i = 0; i < bd->n_bars; i++)
+  {
+    free(bd->bars[i].name);
+  }
+  free(bd->bars);
+  free(bd);
 
   printf("done...\n");
   return 0;

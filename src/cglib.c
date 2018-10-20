@@ -141,26 +141,6 @@ void draw_axis_horizontals(FILE* file, float x_axel_y_offset, float y_axel_x_off
   return;
 }
 
-void get_gradient(struct theme_data* td)
-{
-  int rgb_delta;
-  int rgb_delta_index;
-  int8_t direction = 1;
-
-  for(int i = 0; i < 3; i++)
-  {
-    rgb_delta = td->stop_color_rgb[i] - td->start_color_rgb[i];
-    rgb_delta *= (rgb_delta < 0) ? -1 : 1;
-
-    direction = (td->start_color_rgb[i] > td->stop_color_rgb[i]) ? -1 : 1;
-
-    rgb_delta_index = rgb_delta * td->percentage;
-    
-    td->out_color_rgb[i] = td->start_color_rgb[i] + rgb_delta_index * direction;
-  }
-  return;
-}
-
 void print_top_header(FILE* file, struct general_data* gd)
 {
   fprintf(file, 
@@ -228,4 +208,21 @@ void destroy_group_dat(struct group_data* grp_dat)
   free(grp_dat->cmp_2_out);
   free(grp_dat);
   return;
+}
+
+int32_t cut_(int32_t range[2], int32_t x)
+{
+  if(x < range[0])
+  {
+    int8_t flip = (range[0] < 0) ? -1 : 1;
+    return cut_(range, x + range[0] * flip);
+  }
+  else if(x > range[1])
+  {
+    return cut_(range, range[0] - (x - range[1] - 1));
+  }
+  else
+  {
+    return x;
+  }
 }

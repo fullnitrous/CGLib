@@ -20,23 +20,24 @@ void hbar(struct bar_data* bd)
   free(ret);
   struct group_data* grp_dat = init_group_dat(file, "text-anchor=\"end\"", "\0");
   int8_t m = 1;
-  for(int i = 0; i < bd->n_bars; i++)
+  select_color_function(bd->theme);
+  loop(bd->n_bars)
   {
     y = (bar_height + bd->spacing) * i + bd->general->margin / 2.0;
     bar_width = (bd->bars[i].value / (bd->axel_data->w[1] - bd->axel_data->w[0])) * bd->general->viewport_x;
     width_offset = (bar_width < 0) ? bar_width : 0;
     yeet = (bar_width > 0) ? 0 : bar_width;
     bd->theme->percentage = (i + 1) / (bd->n_bars* 1.0);
-    get_gradient(bd->theme);
+    bd->theme->color_function(bd->theme);
     x = bd->general->margin / 2.0 + x_axel_y_offset + width_offset;
     grp_dat->cmp_1 = make_cmp_1(grp_dat, bar_width <= 0);
     grp_dat->cmp_2 = make_cmp_2(grp_dat, bar_width > 0);
     bar_width *= (bar_width > 0) ? 1 : -1;
     m = (print_group(grp_dat) == 1) ? -1 : 1; 
     fprintf(file, svg_box,
-      bd->theme->out_color_rgb[0],
-      bd->theme->out_color_rgb[1],
-      bd->theme->out_color_rgb[2],
+      bd->theme->out.r,
+      bd->theme->out.g,
+      bd->theme->out.b,
       x,
       y,
       bar_width,
