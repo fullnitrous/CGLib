@@ -4,7 +4,7 @@
 - [x] pie and doughnut chart low slice and percentage counts
 - [x] implement the spesific functions and remove repeating code
 - [x] remove remaining bugs & glitches
-- [ ] publish release 0.1
+- [x] publish release 0.1
 
 # Do in the future
 
