@@ -103,5 +103,5 @@ void doughnut(struct pie_data* pd)
   }
   fprintf(file, svg_group_stop);
   fprintf(file, svg_top_header_stop);
-  fclose(file);
+  if(!pd->general->d_file) fclose(file);
 }

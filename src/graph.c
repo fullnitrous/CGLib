@@ -77,6 +77,6 @@ void graph(struct graph_data* gd)
   }
   fprintf(file, svg_group_stop);
   fprintf(file, svg_top_header_stop);
-  fclose(file);
+  if(!gd->general->d_file) fclose(file);
   return;
 }
