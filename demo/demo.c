@@ -12,6 +12,7 @@ int main(void)
   general->viewport_x = 640;
   general->viewport_y = 360;
   general->font_size = 12;
+  general->d_file = 0;
 
   struct axel_data* axel = malloc(sizeof(struct axel_data));
   axel->axel_rgb[0] = 100;
@@ -96,6 +97,11 @@ int main(void)
     gp->lines[1].points[i + 40].y = -count * count * count;
   }
   graph(gp);
+  general->d_file = 1;
+  FILE* direct = fopen("../svg-out/graph-direct.svg", "w");
+  general->file = direct;
+  graph(gp);
+  general->d_file = 0;
 
 
 

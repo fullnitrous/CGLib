@@ -3,8 +3,10 @@
 
 void hbar(struct bar_data* bd)
 {
+  FILE* file;
+  if(bd->general->d_file) file = bd->general->file;
+  else file = fopen(bd->general->file_name, "wb");
   char* ret;
-  FILE* file = fopen(bd->general->file_name, "wb");
   float y_axel_x_offset = (bd->axel_data->h[0] < 0) ? 
                           bd->general->viewport_y * (bd->axel_data->h[0] / (bd->axel_data->h[0] - bd->axel_data->h[1])) : 0;
   float x_axel_y_offset = (bd->axel_data->w[0] < 0) ?

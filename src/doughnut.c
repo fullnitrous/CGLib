@@ -43,7 +43,10 @@ void print_section(FILE* file, struct pie_data* pd, float* origin, float* sum_co
 
 void doughnut(struct pie_data* pd)
 {
-  FILE* file = fopen(pd->general->file_name, "wb");
+  FILE* file;
+  if(pd->general->d_file) file = pd->general->file;
+  else file = fopen(pd->general->file_name, "wb");
+  
   print_top_header(file, pd->general);
   print_font_size_group(file, pd->general);
   float radius = (pd->general->viewport_y <= pd->general->viewport_x) ? (pd->general->viewport_y - pd->general->margin) / 2 : (pd->general->viewport_x - pd->general->margin) / 2;

@@ -43,6 +43,8 @@
   struct general_data
   {
     char* file_name;
+    FILE* file;
+    uint8_t d_file;
     int   stroke_width;
     float margin;
     float viewport_x; 

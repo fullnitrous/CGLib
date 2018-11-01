@@ -3,7 +3,9 @@
 
 void graph(struct graph_data* gd)
 {
-  FILE* file = fopen(gd->general->file_name, "wb");
+  FILE* file;
+  if(gd->general->d_file) file = gd->general->file;
+  else file = fopen(gd->general->file_name, "wb");
 
   fprintf(file, 
     svg_top_header_start, 

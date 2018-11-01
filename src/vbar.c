@@ -3,7 +3,10 @@
 
 void vbar(struct bar_data* bd)
 {
-  FILE* file = fopen(bd->general->file_name, "wb");
+  FILE* file;
+  if(bd->general->d_file) file = bd->general->file;
+  else file = fopen(bd->general->file_name, "wb");
+
   fprintf(file, 
     svg_top_header_start, 
     bd->general->viewport_x + bd->general->margin, 

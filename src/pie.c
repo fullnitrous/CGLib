@@ -40,6 +40,9 @@ void print_slice(FILE* file, struct pie_data* pd, float* origin, float* sum_coun
 void pie(struct pie_data* pd)
 {
   FILE* file;
+  if(pd->general->d_file) file = pd->general->file;
+  else file = fopen(pd->general->file_name, "wb");
+
   uint8_t large_arc_flag;
   float percentage_overlap, 
         radius, 
