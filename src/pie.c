@@ -53,9 +53,7 @@ void pie(struct pie_data* pd)
         origin_radius;
 
   origin_radius = 0.0;
-
-
-  file = fopen(pd->general->file_name, "wb");
+  
   print_top_header(file, pd->general);
   radius = (pd->general->viewport_y <= pd->general->viewport_x) ? (pd->general->viewport_y - pd->general->margin) / 2 : (pd->general->viewport_x - pd->general->margin) / 2;
   origin[0] = pd->general->viewport_x / 2.0 + pd->general->margin / 2.0;
