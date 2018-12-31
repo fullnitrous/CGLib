@@ -54,8 +54,6 @@ int main(void)
 
 
 
-
-  /* normal line graph */
   struct graph_data* gp = malloc(sizeof(struct graph_data));
   gp->general = general;
   gp->axel_data = axel;
@@ -99,17 +97,21 @@ int main(void)
   graph(gp);
   general->d_file = 1;
   FILE* direct = fopen("../svg-out/graph-direct.svg", "w");
+  
   general->file = direct;
   graph(gp);
   general->d_file = 0;
 
+  fclose(direct);
+
+  free(gp->lines[0].points);
+  free(gp->lines[1].points);
+  free(gp->lines);
+  free(gp);
 
 
 
-
-
-
-  /* pie chart */
+  /*
   struct pie_data* pd = malloc(sizeof(struct pie_data));
   free(general->file_name);
   general->file_name = malloc(sizeof(char) * 30);
@@ -141,9 +143,17 @@ int main(void)
   strcpy(pd->doughnut_sub_header, "Label\0");
   doughnut(pd);
 
+  free(pd->doughnut_header);
+  free(pd->doughnut_sub_header);
+  for(int i = 0; i < pd->n_slices; i++)
+  {
+    free(pd->slices[i].name);
+  }
+  free(pd->slices);
+  free(pd);
 
+  */
 
-  /* bar chart */
   struct bar_data* bd = malloc(sizeof(struct bar_data));
   free(general->file_name);
   general->file_name = malloc(sizeof(char) * 30);
@@ -189,18 +199,8 @@ int main(void)
   free(general);
   free(axel);
   free(theme);
-  free(gp->lines[0].points);
-  free(gp->lines[1].points);
-  free(gp->lines);
-  free(gp);
-  free(pd->doughnut_header);
-  free(pd->doughnut_sub_header);
-  for(int i = 0; i < pd->n_slices; i++)
-  {
-    free(pd->slices[i].name);
-  }
-  free(pd->slices);
-  free(pd);
+  
+
   for(int i = 0; i < bd->n_bars; i++)
   {
     free(bd->bars[i].name);

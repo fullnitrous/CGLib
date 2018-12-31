@@ -34,6 +34,7 @@ void vbar(struct bar_data* bd)
   fprintf(file, svg_custom_group, ret);
   free(ret);
   fprintf(file, svg_limiter_box);
+  select_color_function(bd->theme);
   loop(bd->n_bars)
   {
     height = (bd->bars[i].value / (bd->axel_data->h[1] - bd->axel_data->h[0])) * bd->general->viewport_y;
@@ -41,7 +42,9 @@ void vbar(struct bar_data* bd)
     height_offset_2 = (height > 0) ? height : height - 20.0;
     height *= (height > 0) ? 1 : -1;
     bd->theme->percentage = (i + 1) / (bd->n_bars* 1.0);
+    
     bd->theme->color_function(bd->theme);
+    
     fprintf(file, svg_box,
       bd->theme->out.r,
       bd->theme->out.g,
